@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomizeFolderTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Loaded="Grid_Loaded">
-        
+        Title="自定义文件夹工具" Height="87" Width="302" WindowStyle="ToolWindow" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Button x:Name="BtnModify" Content="修改文件夹别名" HorizontalAlignment="Left" VerticalAlignment="Top" Width="98" Margin="175,10,0,0" Click="BtnModify_Click"/>
+        <TextBox x:Name="txtAlias" HorizontalAlignment="Left" Height="19" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
     </Grid>
 </Window>

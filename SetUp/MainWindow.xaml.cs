@@ -22,7 +22,7 @@ namespace SetUp {
                 MessageBox.Show("CustomizeFolderTool.exe不存在");
                 return;
             }
-            Register.Add(exe + @" ""%1"" /ranfromshell");
+            Register.Add(exe + @" ""%1""");
             MessageBox.Show("添加成功");
         }
 

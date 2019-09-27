@@ -17,7 +17,7 @@ namespace SetUp {
             try {
                 regmenu = Registry.ClassesRoot.CreateSubKey(MenuName);
                 if (regmenu != null) {
-                    regmenu.SetValue("", "自定义文件夹");
+                    regmenu.SetValue("", "添加别名");
                 }
                 regcmd = Registry.ClassesRoot.CreateSubKey(Command);
                 if (regcmd != null)

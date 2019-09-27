@@ -11,8 +11,12 @@ namespace CustomizeFolderTool {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
+        public static string Path;
         private void Application_Startup(object sender, StartupEventArgs e) {
-
+            if (e.Args.Length == 1 && System.IO.Directory.Exists(e.Args[0])) {
+                Path = e.Args[0];
+            }
+            Path = @"D:\ZDHJ";
         }
     }
 }
