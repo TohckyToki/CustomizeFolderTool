@@ -1,0 +1,13 @@
+﻿<Window x:Class="SetUp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SetUp"
+        mc:Ignorable="d"
+        Title="注册" Height="160.714" Width="205.357" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
+    <Grid>
+        <Button x:Name="BtnAdd" Content="添加注册" HorizontalAlignment="Left" Height="26" Margin="32,24,0,0" VerticalAlignment="Top" Width="126" Click="BtnAdd_Click"/>
+        <Button x:Name="BtnDelete" Content="删除注册" HorizontalAlignment="Left" Height="26" Margin="32,73,0,0" VerticalAlignment="Top" Width="126" Click="BtnDelete_Click"/>
+    </Grid>
+</Window>
