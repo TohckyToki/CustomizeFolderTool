@@ -16,7 +16,6 @@ namespace CustomizeFolderTool {
             if (e.Args.Length == 1 && System.IO.Directory.Exists(e.Args[0])) {
                 Path = e.Args[0];
             }
-            Path = @"D:\ZDHJ";
         }
     }
 }
