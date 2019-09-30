@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SetUp"
         mc:Ignorable="d"
-        Title="注册" Height="160.714" Width="205.357" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
-    <Grid>
-        <Button x:Name="BtnAdd" Content="添加注册" HorizontalAlignment="Left" Height="26" Margin="32,24,0,0" VerticalAlignment="Top" Width="126" Click="BtnAdd_Click"/>
-        <Button x:Name="BtnDelete" Content="删除注册" HorizontalAlignment="Left" Height="26" Margin="32,73,0,0" VerticalAlignment="Top" Width="126" Click="BtnDelete_Click"/>
+        Title="注册" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight">
+    <Grid Width="146" Height="76">
+        <Button x:Name="BtnAdd" Content="添加注册" HorizontalAlignment="Left" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="126" Click="BtnAdd_Click"/>
+        <Button x:Name="BtnDelete" Content="删除注册" HorizontalAlignment="Left" Height="26" Margin="10,41,0,0" VerticalAlignment="Top" Width="126" Click="BtnDelete_Click"/>
     </Grid>
 </Window>
