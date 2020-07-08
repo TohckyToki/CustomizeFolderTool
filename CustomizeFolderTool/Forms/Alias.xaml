@@ -1,0 +1,13 @@
+﻿<Window x:Class="CustomizeFolderTool.Forms.Alias"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomizeFolderTool.Forms"
+        mc:Ignorable="d"
+        Title="Alias" WindowStyle="None" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closing="Window_Closing">
+    <Grid Height="44" Width="362">
+        <TextBox x:Name="txtAlias" HorizontalAlignment="Left" Height="24" Margin="10,10,0,0" TextWrapping="Wrap" KeyDown="TextBoxKeyDown" VerticalAlignment="Top" Width="254" VerticalContentAlignment="Center"/>
+        <Button Content="OK" HorizontalAlignment="Left" Margin="269,10,0,0" VerticalAlignment="Top" Width="75" Height="24" Click="ButtonClick"/>
+    </Grid>
+</Window>
