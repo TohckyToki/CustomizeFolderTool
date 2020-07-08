@@ -43,8 +43,10 @@ namespace CustomizeFolderTool.Util {
             this.data = parser.ReadFile(filePath);
         }
 
+        /// <summary>
+        /// 保存Ini数据到文件
+        /// </summary>
         public void Save() {
-            //Todo: Change the file properties to make sure it can be written.
             var fInfo = new FileInfo(filePath);
             fInfo.Attributes = FileAttributes.Normal;
             File.WriteAllText(filePath, data.ToString());
@@ -72,7 +74,8 @@ namespace CustomizeFolderTool.Util {
         #region External
         private void RefreshSystemFile() {
             LPSHFOLDERCUSTOMSETTINGS FolderSettings = new LPSHFOLDERCUSTOMSETTINGS();
-            FolderSettings.dwMask = 0x10;
+            
+            FolderSettings.dwMask = 0x40;
             uint FCS_FORCEWRITE = 0x00000002;
             var pszPath = Path.GetDirectoryName(filePath);
             _ = SHGetSetFolderCustomSettings(ref FolderSettings, pszPath, FCS_FORCEWRITE);
