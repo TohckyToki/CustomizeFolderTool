@@ -20,7 +20,7 @@ DefaultGroupName={#MyAppName}
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\yueng\source\repos\TohckyToki\CustomizeFolderTool\Setup
-OutputBaseFilename=setup
+OutputBaseFilename=Installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -35,3 +35,16 @@ Source: "C:\Users\yueng\source\repos\TohckyToki\CustomizeFolderTool\Release\*"; 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
+[Run]
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --add"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在进行注册..."; Check: IsAdminInstallMode();
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --add"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在进行注册..."; Check: IsNotAdminInstallMode();
+
+[Run]
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --delete"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在解除注册..."; Check: IsAdminInstallMode();
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --delete"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在解除注册..."; Check: IsNotAdminInstallMode();
+
+[Code]
+function IsNotAdminInstallMode(): Boolean;
+begin
+  Result := not IsAdminInstallMode();
+end;
