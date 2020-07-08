@@ -49,7 +49,7 @@ namespace CustomizeFolderTool.Util {
         public void Save() {
             var fInfo = new FileInfo(filePath);
             fInfo.Attributes = FileAttributes.Normal;
-            File.WriteAllText(filePath, data.ToString());
+            File.WriteAllText(filePath, data.ToString(), Encoding.Unicode);
             RefreshSystemFile();
         }
 
