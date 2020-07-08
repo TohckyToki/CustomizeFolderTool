@@ -36,12 +36,12 @@ Source: "C:\Users\yueng\source\repos\TohckyToki\CustomizeFolderTool\Release\*"; 
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --add"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在进行注册..."; Check: IsAdminInstallMode();
-Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --add"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在进行注册..."; Check: IsNotAdminInstallMode();
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --add"; WorkingDir: {app}; StatusMsg: "正在进行注册..."; Check: IsAdminInstallMode();
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --add"; WorkingDir: {app}; StatusMsg: "正在进行注册..."; Check: IsNotAdminInstallMode();
 
-[Run]
-Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --delete"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在解除注册..."; Check: IsAdminInstallMode();
-Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --delete"; WorkingDir: {app}; Flags: skipifdoesntexist; StatusMsg: "正在解除注册..."; Check: IsNotAdminInstallMode();
+[UninstallRun]
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --admin --delete"; WorkingDir: {app};StatusMsg: "正在解除注册..."; Check: IsAdminInstallMode();
+Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --delete"; WorkingDir: {app}; StatusMsg: "正在解除注册..."; Check: IsNotAdminInstallMode();
 
 [Code]
 function IsNotAdminInstallMode(): Boolean;
