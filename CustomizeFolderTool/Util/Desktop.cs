@@ -71,10 +71,35 @@ namespace CustomizeFolderTool.Util {
             return this;
         }
 
+        private void DeleteIconFile(KeyDataCollection section) {
+            if (section.ContainsKey("IconResource")) {
+                var oldIcon = section["IconResource"];
+                var imgPath = oldIcon.Split(',')[0];
+                if (Path.GetExtension(imgPath) == ".ico") {
+                    var folderPath = Path.GetDirectoryName(filePath);
+                    File.Delete(Path.Combine(folderPath, imgPath));
+                }
+                section.RemoveKey("IconResource");
+            }
+        }
+
+        public Desktop DeleteIcon() {
+            var section = GetOrCreateSectionData(".ShellClassInfo");
+            DeleteIconFile(section);
+            return this;
+        }
+
+        public Desktop CreateIcon(string iconPath) {
+            var section = GetOrCreateSectionData(".ShellClassInfo");
+            DeleteIconFile(section);
+            section.AddKey("IconResource", Path.GetFileName(iconPath) + ",0");
+            return this;
+        }
+
         #region External
         private void RefreshSystemFile() {
             LPSHFOLDERCUSTOMSETTINGS FolderSettings = new LPSHFOLDERCUSTOMSETTINGS();
-            
+
             FolderSettings.dwMask = 0x40;
             uint FCS_FORCEWRITE = 0x00000002;
             var pszPath = Path.GetDirectoryName(filePath);

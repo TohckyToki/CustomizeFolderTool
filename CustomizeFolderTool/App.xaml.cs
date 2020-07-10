@@ -49,9 +49,16 @@ namespace CustomizeFolderTool {
                         }
                         break;
                     case "-color":
-                        if (true) {
-                            this.StartupUri = new Uri("./Forms/Color.xaml", UriKind.Relative);
-                            isShutdown = false;
+                        if (e.Args.Length > 2) {
+                            if (Directory.Exists(e.Args[2])) {
+                                if (e.Args[1].ToLower() == "--add") {
+                                    this.StartupUri = new Uri("./Forms/Color.xaml", UriKind.Relative);
+                                    Color.folderPath = e.Args[2];
+                                    isShutdown = false;
+                                } else if (e.Args[1].ToLower() == "--delete") {
+                                    Desktop.CreateDesktopFile(e.Args[2]).DeleteAlias().Save();
+                                }
+                            }
                         }
                         break;
                     default:

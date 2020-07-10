@@ -33,14 +33,25 @@ namespace CustomizeFolderTool.Util {
 
                 regMainMenu = regDirectory.CreateSubKey("ContextMenus").CreateSubKey("CustomizeFolderTool").CreateSubKey("shell");
 
-                regCmd = regMainMenu.CreateSubKey("AddAlias");
+                regCmd = regMainMenu.CreateSubKey("_01_AddAlias");
                 regCmd.SetValue("", "添加别名");
                 regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -alias --add ""%1""");
                 regCmd.Close();
 
-                regCmd = regMainMenu.CreateSubKey("DeleteAlias");
+                regCmd = regMainMenu.CreateSubKey("_02_DeleteAlias");
                 regCmd.SetValue("", "移除别名");
+                regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
                 regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -alias --delete ""%1""");
+                regCmd.Close();
+
+                regCmd = regMainMenu.CreateSubKey("_03_ModifyColor");
+                regCmd.SetValue("", "更换图标");
+                regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -color --add ""%1""");
+                regCmd.Close();
+
+                regCmd = regMainMenu.CreateSubKey("_04_ClearColor");
+                regCmd.SetValue("", "还原图标");
+                regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -color --delete ""%1""");
                 regCmd.Close();
 
             } catch (Exception) {
