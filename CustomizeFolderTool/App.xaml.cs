@@ -50,7 +50,8 @@ namespace CustomizeFolderTool {
                         break;
                     case "-color":
                         if (true) {
-
+                            this.StartupUri = new Uri("./Forms/Color.xaml", UriKind.Relative);
+                            isShutdown = false;
                         }
                         break;
                     default:
