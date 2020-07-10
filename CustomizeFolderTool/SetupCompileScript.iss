@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "CustomizeFolderTool"
-#define MyAppVersion "0.1"
+#define MyAppVersion "0.2"
 #define MyAppPublisher "YuengFu"
 
 [Setup]
@@ -47,4 +47,25 @@ Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --delet
 function IsNotAdminInstallMode(): Boolean;
 begin
   Result := not IsAdminInstallMode();
+end;
+
+function InitializeSetup(): boolean;  
+var  
+  ResultStr: String;  
+  ResultCode: Integer;  
+begin  
+  if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B9F334C3-3AE8-4A3D-98AF-9F2E6BA93A61}_is1', 'UninstallString', ResultStr) then  
+    begin  
+      ResultStr := RemoveQuotes(ResultStr);  
+      Exec(ResultStr, '/silent', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);  
+    end;  
+    result := true;  
+end;
+ 
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usDone then
+    begin
+    DelTree(ExpandConstant('{app}'), True, True, True);
+    end;
 end;
