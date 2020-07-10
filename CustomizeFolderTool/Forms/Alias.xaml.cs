@@ -34,10 +34,14 @@ namespace CustomizeFolderTool.Forms {
             }
         }
 
-        private void ButtonClick(object sender, RoutedEventArgs eventArgs) {
+        private void Button1Click(object sender, RoutedEventArgs eventArgs) {
             if (CheckIsValided()) {
                 ApplyAlias();
             }
+        }
+
+        private void Button2Click(object sender, RoutedEventArgs eventArgs) {
+            Close();
         }
 
         private bool CheckIsValided() {
