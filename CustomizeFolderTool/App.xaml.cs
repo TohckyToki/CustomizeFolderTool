@@ -56,7 +56,7 @@ namespace CustomizeFolderTool {
                                     Color.folderPath = e.Args[2];
                                     isShutdown = false;
                                 } else if (e.Args[1].ToLower() == "--delete") {
-                                    Desktop.CreateDesktopFile(e.Args[2]).DeleteAlias().Save();
+                                    Desktop.CreateDesktopFile(e.Args[2]).DeleteIcon().Save();
                                 }
                             }
                         }
