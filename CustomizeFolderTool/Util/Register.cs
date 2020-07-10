@@ -20,6 +20,8 @@ namespace CustomizeFolderTool.Util {
         }
 
         public void Add() {
+            Delete(false);
+
             var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             var exePath = Path.Combine(installedPath, "CustomizeFolderTool.exe");
             RegistryKey regMainMenu = null;
@@ -62,13 +64,15 @@ namespace CustomizeFolderTool.Util {
             }
         }
 
-        public void Delete() {
+        public void Delete(bool needClose = true) {
             try {
                 regDirectory.CreateSubKey("shell").DeleteSubKeyTree("CustomizeFolderTool");
                 regDirectory.CreateSubKey("ContextMenus").DeleteSubKeyTree("CustomizeFolderTool");
             } catch (Exception) {
             } finally {
-                regDirectory.Close();
+                if (needClose) {
+                    regDirectory.Close();
+                }
             }
         }
     }
