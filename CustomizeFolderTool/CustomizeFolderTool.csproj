@@ -83,6 +83,9 @@
     <Compile Include="Forms\Alias.xaml.cs">
       <DependentUpon>Alias.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Color.xaml.cs">
+      <DependentUpon>Color.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\Desktop.cs" />
     <Compile Include="Util\Register.cs" />
     <Page Include="dummy.xaml">
@@ -97,6 +100,10 @@
       <DependentUpon>dummy.xaml</DependentUpon>
     </Compile>
     <Page Include="Forms\Alias.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Color.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -126,6 +133,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Plus.ico" />
+    <None Include="Resources\Color12.ico" />
+    <None Include="Resources\Color11.ico" />
+    <None Include="Resources\Color10.ico" />
+    <None Include="Resources\Color09.ico" />
+    <None Include="Resources\Color08.ico" />
+    <None Include="Resources\Color07.ico" />
+    <None Include="Resources\Color06.ico" />
+    <None Include="Resources\Color05.ico" />
+    <None Include="Resources\Color04.ico" />
+    <None Include="Resources\Color03.ico" />
+    <None Include="Resources\Color02.ico" />
+    <None Include="Resources\Color01.ico" />
+    <None Include="Resources\Color00.ico" />
+    <None Include="Resources\Default.ico" />
     <Content Include="assets\CustomizeFolderTool.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
