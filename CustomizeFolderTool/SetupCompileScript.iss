@@ -4,6 +4,7 @@
 #define MyAppName "CustomizeFolderTool"
 #define MyAppVersion "0.2.4"
 #define MyAppPublisher "YuengFu"
+#define OutputName "Installer@0.2.4"
 
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
@@ -20,7 +21,7 @@ DefaultGroupName={#MyAppName}
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\yueng\source\repos\TohckyToki\CustomizeFolderTool\Setup
-OutputBaseFilename=Installer
+OutputBaseFilename={#OutputName}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -47,25 +48,4 @@ Filename: "{app}\CustomizeFolderTool.exe"; Parameters: "-register --user --delet
 function IsNotAdminInstallMode(): Boolean;
 begin
   Result := not IsAdminInstallMode();
-end;
-
-function InitializeSetup(): boolean;  
-var  
-  ResultStr: String;  
-  ResultCode: Integer;  
-begin  
-  if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B9F334C3-3AE8-4A3D-98AF-9F2E6BA93A61}_is1', 'UninstallString', ResultStr) then  
-    begin  
-      ResultStr := RemoveQuotes(ResultStr);  
-      Exec(ResultStr, '/silent', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);  
-    end;  
-    result := true;  
-end;
- 
-procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
-begin
-  if CurUninstallStep = usDone then
-    begin
-    DelTree(ExpandConstant('{app}'), True, True, True);
-    end;
 end;
