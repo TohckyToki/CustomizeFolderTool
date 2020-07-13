@@ -53,7 +53,18 @@ namespace CustomizeFolderTool.Util {
 
                 regCmd = regMainMenu.CreateSubKey("_04_ClearColor");
                 regCmd.SetValue("", "还原图标");
+                regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
                 regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -color --delete ""%1""");
+                regCmd.Close();
+
+                regCmd = regMainMenu.CreateSubKey("_05_AddTipinfo");
+                regCmd.SetValue("", "添加备注");
+                regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -tipinfo --add ""%1""");
+                regCmd.Close();
+
+                regCmd = regMainMenu.CreateSubKey("_06_DeleteTipinfo");
+                regCmd.SetValue("", "删除备注");
+                regCmd.CreateSubKey("command").SetValue("", $@"{exePath} -tipinfo --delete ""%1""");
                 regCmd.Close();
 
             } catch (Exception) {

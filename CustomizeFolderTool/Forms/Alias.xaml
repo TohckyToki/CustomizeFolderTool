@@ -8,7 +8,7 @@
         Title="别名管理" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid Height="93" Width="362">
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="请输入文件夹别名" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtAlias" HorizontalAlignment="Left" Height="24" Margin="10,30,0,0" TextWrapping="Wrap" KeyDown="TextBoxKeyDown" VerticalAlignment="Top" Width="342" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="txtAlias" HorizontalAlignment="Left" Height="24" Margin="10,30,0,0" TextWrapping="NoWrap" KeyDown="TextBoxKeyDown" VerticalAlignment="Top" Width="342" VerticalContentAlignment="Center" MaxLines="1"/>
         <Button Content="确定" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="90" Height="24" Click="Button1Click"/>
         <Button Content="取消" Margin="0,59,10,0" VerticalAlignment="Top" Height="24" Click="Button2Click" HorizontalAlignment="Right" Width="90"/>
     </Grid>

@@ -53,19 +53,19 @@ namespace CustomizeFolderTool.Util {
             RefreshSystemFile();
         }
 
-        private KeyDataCollection GetOrCreateSectionData(string sectionName) {
+        private KeyDataCollection CreateSectionData(string sectionName) {
             data.Sections.AddSection(sectionName);
             return data.Sections[sectionName];
         }
 
         public Desktop DeleteAlias() {
-            var section = GetOrCreateSectionData(".ShellClassInfo");
+            var section = CreateSectionData(".ShellClassInfo");
             section.RemoveKey("LocalizedResourceName");
             return this;
         }
 
         public Desktop CreateAlias(string alias) {
-            var section = GetOrCreateSectionData(".ShellClassInfo");
+            var section = CreateSectionData(".ShellClassInfo");
             section.RemoveKey("LocalizedResourceName");
             section.AddKey("LocalizedResourceName", alias);
             return this;
@@ -84,15 +84,28 @@ namespace CustomizeFolderTool.Util {
         }
 
         public Desktop DeleteIcon() {
-            var section = GetOrCreateSectionData(".ShellClassInfo");
+            var section = CreateSectionData(".ShellClassInfo");
             DeleteIconFile(section);
             return this;
         }
 
         public Desktop CreateIcon(string iconPath) {
-            var section = GetOrCreateSectionData(".ShellClassInfo");
+            var section = CreateSectionData(".ShellClassInfo");
             DeleteIconFile(section);
             section.AddKey("IconResource", Path.GetFileName(iconPath) + ",0");
+            return this;
+        }
+
+        public Desktop DeleteTipinfo() {
+            var section = CreateSectionData(".ShellClassInfo");
+            section.RemoveKey("InfoTip");
+            return this;
+        }
+
+        public Desktop CreateTipinfo(string tipinfo) {
+            var section = CreateSectionData(".ShellClassInfo");
+            section.RemoveKey("InfoTip");
+            section.AddKey("InfoTip", tipinfo);
             return this;
         }
 

@@ -61,6 +61,19 @@ namespace CustomizeFolderTool {
                             }
                         }
                         break;
+                    case "-tipinfo":
+                        if (e.Args.Length > 2) {
+                            if (Directory.Exists(e.Args[2])) {
+                                if (e.Args[1].ToLower() == "--add") {
+                                    this.StartupUri = new Uri("./Forms/Tipinfo.xaml", UriKind.Relative);
+                                    Tipinfo.folderPath = e.Args[2];
+                                    isShutdown = false;
+                                } else if (e.Args[1].ToLower() == "--delete") {
+                                    Desktop.CreateDesktopFile(e.Args[2]).DeleteTipinfo().Save();
+                                }
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
