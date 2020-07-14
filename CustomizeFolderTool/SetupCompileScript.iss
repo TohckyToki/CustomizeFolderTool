@@ -2,9 +2,9 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "CustomizeFolderTool"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "YuengFu"
-#define OutputName "Installer@1.0.0"
+#define OutputName "Installer@1.0.1"
 
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
