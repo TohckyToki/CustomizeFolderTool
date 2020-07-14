@@ -113,21 +113,16 @@ namespace CustomizeFolderTool.Forms {
                 }
             });
             if (ofd.ShowDialog(this) ?? false) {
-                Icon icon;
-                switch (Path.GetExtension(ofd.FileName)) {
-                    case ".ico":
-                        icon = new Icon(ofd.FileName);
-                        break;
-                    case ".png":
-                        icon = System.Drawing.Icon.FromHandle(((Bitmap)System.Drawing.Image.FromFile(ofd.FileName)).GetHicon());
-                        break;
-                    default:
-                        icon = null;
-                        break;
-                }
                 var iconPath = GenerateNewIconFileName();
                 using (FileStream stream = File.OpenWrite(iconPath)) {
-                    icon?.Save(stream);
+                    switch (Path.GetExtension(ofd.FileName)) {
+                        case ".ico":
+                            new Icon(ofd.FileName).Save(stream);
+                            break;
+                        case ".png":
+                            IconFromImage(System.Drawing.Image.FromFile(ofd.FileName)).Save(stream);
+                            break;
+                    }
                     new FileInfo(iconPath) {
                         Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
                     }.Refresh();
@@ -170,6 +165,39 @@ namespace CustomizeFolderTool.Forms {
             }
 
             return destImage;
+        }
+
+        private Icon IconFromImage(System.Drawing.Image img) {
+            var ms = new MemoryStream();
+            var bw = new BinaryWriter(ms);
+            // Header
+            bw.Write((short)0);   // 0 : reserved
+            bw.Write((short)1);   // 2 : 1=ico, 2=cur
+            bw.Write((short)1);   // 4 : number of images
+                                  // Image directory
+            var w = img.Width;
+            if (w >= 256) w = 0;
+            bw.Write((byte)w);    // 0 : width of image
+            var h = img.Height;
+            if (h >= 256) h = 0;
+            bw.Write((byte)h);    // 1 : height of image
+            bw.Write((byte)0);    // 2 : number of colors in palette
+            bw.Write((byte)0);    // 3 : reserved
+            bw.Write((short)0);   // 4 : number of color planes
+            bw.Write((short)0);   // 6 : bits per pixel
+            var sizeHere = ms.Position;
+            bw.Write(0);     // 8 : image size
+            var start = (int)ms.Position + 4;
+            bw.Write(start);      // 12: offset of image data
+                                  // Image data
+            img.Save(ms, ImageFormat.Png);
+            var imageSize = (int)ms.Position - start;
+            ms.Seek(sizeHere, SeekOrigin.Begin);
+            bw.Write(imageSize);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            // And load it
+            return new Icon(ms);
         }
     }
 }
