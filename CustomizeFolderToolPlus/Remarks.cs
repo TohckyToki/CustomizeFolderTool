@@ -1,22 +1,32 @@
-using CustomizeFolderToolPlus.Languages;
+﻿using CustomizeFolderToolPlus.Languages;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace CustomizeFolderToolPlus
+namespace CustomizeFolderToolPlus.Forms
 {
-    public partial class Alias : Form, IBaseForm
+    public partial class Remarks : Form, IBaseForm
     {
         public string? FolderPath { get; set; }
         public ILanguage? Language { get; set; }
-        public Alias()
+
+        public Remarks()
         {
             InitializeComponent();
         }
 
-        private void Alias_Load(object sender, EventArgs e)
+        private void Remarks_Load(object sender, EventArgs e)
         {
             if (Language != null)
             {
-                this.Text = Language.AliasTitle;
-                this.label1.Text = Language.AliasMessage;
+                this.Text = Language.RemarksTitle;
+                this.label1.Text = Language.RemarksMessage;
                 this.button1.Text = Language.ConfirmText;
                 this.button2.Text = Language.CancelText;
             }
@@ -27,13 +37,13 @@ namespace CustomizeFolderToolPlus
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SaveAlias(textBox1.Text);
+                SaveRemarks(textBox1.Text);
             }
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            SaveAlias(textBox1.Text);
+            SaveRemarks(textBox1.Text);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -41,14 +51,14 @@ namespace CustomizeFolderToolPlus
             this.Close();
         }
 
-        private void SaveAlias(string alias)
+        private void SaveRemarks(string remarks)
         {
-            if (string.IsNullOrEmpty(alias))
+            if (string.IsNullOrEmpty(remarks))
             {
                 textBox1.Focus();
                 return;
             }
-            FolderTool.CreateDesktopFile(this.FolderPath!).CreateAlias(alias).Save();
+            FolderTool.CreateDesktopFile(this.FolderPath!).CreateRemarks(remarks).Save();
             this.Close();
         }
     }

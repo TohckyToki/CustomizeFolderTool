@@ -8,6 +8,8 @@ namespace ToolRegister.Languages
 {
     public class English : ILanguage
     {
+        public string CodePage => "en-US";
+
         public string LanguageTitle => "Language";
 
         public string Register => "Register";

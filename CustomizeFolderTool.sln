@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomizeFolderToolPlus", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolRegister", "ToolRegister\ToolRegister.csproj", "{55E421DC-9D16-4247-9D1B-1A4DE5BB0C8E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomizeFolderToolPlus", "CustomizeFolderToolPlus", "{B6FD668A-3494-4C83-BB29-4298DF14DFFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A024701-300F-4519-B1C1-6D3FBDD89451} = {B6FD668A-3494-4C83-BB29-4298DF14DFFD}
+		{55E421DC-9D16-4247-9D1B-1A4DE5BB0C8E} = {B6FD668A-3494-4C83-BB29-4298DF14DFFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF62CB2A-6356-4B73-A935-07B01E7A8267}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomizeFolderToolPlus.Languages;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace CustomizeFolderToolPlus.Forms
     public partial class Icons : Form, IBaseForm
     {
         public string? FolderPath { get; set; }
+        public ILanguage? Language { get; set; }
         public Icons()
         {
             InitializeComponent();

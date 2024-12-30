@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CustomizeFolderToolPlus.Languages;
 
 namespace ToolRegister.Languages
 {
-    public interface ILanguage
+    public interface ILanguage : ILanguageBase
     {
         public string LanguageTitle { get; }
         public string Register { get; }

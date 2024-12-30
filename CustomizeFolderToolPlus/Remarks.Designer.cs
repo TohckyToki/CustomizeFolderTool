@@ -1,14 +1,16 @@
-﻿namespace CustomizeFolderToolPlus
+﻿
+
+namespace CustomizeFolderToolPlus.Forms
 {
-    partial class Alias
+    partial class Remarks
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,8 +25,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -71,7 +73,7 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += this.Button2_Click;
             // 
-            // Alias
+            // Remarks
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
@@ -81,10 +83,10 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            this.Name = "Alias";
+            this.Name = "Remarks";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += this.Alias_Load;
+            this.Load += this.Remarks_Load;
             this.ResumeLayout(false);
             this.PerformLayout();
         }

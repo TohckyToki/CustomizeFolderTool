@@ -8,6 +8,8 @@ namespace ToolRegister.Languages
 {
     public class Chinese : ILanguage
     {
+        public string CodePage => "zh-CN";
+
         public string LanguageTitle => "语言选择";
 
         public string Register => "注册";

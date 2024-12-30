@@ -61,7 +61,7 @@ public partial class Form1 : Form
                 break;
             case Register.RegisterState.None:
             default:
-            checkBox1.Enabled = true;
+                checkBox1.Enabled = true;
                 button1.Enabled = true;
                 button2.Enabled = false;
                 break;
