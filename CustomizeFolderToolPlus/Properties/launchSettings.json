@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CustomizeFolderToolPlus": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\_\\_svn\\01_Management\\02_監視・進捗管理\" -a alias -lang en-US"
+    }
+  }
+}

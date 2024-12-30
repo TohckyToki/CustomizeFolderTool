@@ -26,7 +26,7 @@ public class Register
         {
             regMainMenu = this.regDirectory.CreateSubKey("shell").CreateSubKey("CustomizeFolderTool");
             regMainMenu.SetValue("", "CustomizeFolderTool");
-            regMainMenu.SetValue("Icon", Path.Combine(installedPath, "assets", "CustomizeFolderTool.ico"), RegistryValueKind.String);
+            regMainMenu.SetValue("Icon", Path.Combine(installedPath, "Assets", "CustomizeFolderTool.ico"), RegistryValueKind.String);
             regMainMenu.SetValue("ExtendedSubCommandsKey", @"Directory\ContextMenus\CustomizeFolderTool", RegistryValueKind.String);
             regMainMenu.Close();
 

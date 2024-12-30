@@ -48,6 +48,7 @@ namespace CustomizeFolderToolPlus
 
                 if (behavior == "-a")
                 {
+                    ApplicationConfiguration.Initialize();
                     IBaseForm? form = target switch
                     {
                         "alias" => new Alias(),
@@ -60,7 +61,6 @@ namespace CustomizeFolderToolPlus
                         form.FolderPath = folder;
                         form.Language = language;
 
-                        ApplicationConfiguration.Initialize();
                         Application.Run((Form)form);
                     }
                 }
