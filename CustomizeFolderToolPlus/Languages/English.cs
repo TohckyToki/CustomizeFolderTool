@@ -10,11 +10,41 @@ public class English : ILanguage
 
     public string AliasTitle => "Alias";
 
-    public string AliasMessage => "Input your folder alias please";
+    public string AliasMessage => "Input alias for your folder please";
 
-    public string IconsTitle => "Icons";
+    public string IconTitle => "Icon";
 
-    public string RemarksTitle => "Remarks";
+    public string CommentTitle => "Comment";
 
-    public string RemarksMessage => "Input remarks for your folder please";
+    public string CommentMessage => "Input comment for your folder please";
+
+    public string IconDefault => "Icon Default";
+
+    public string Icon01 => "Icon 01";
+
+    public string Icon02 => "Icon 02";
+
+    public string Icon03 => "Icon 03";
+
+    public string Icon04 => "Icon 04";
+
+    public string Icon05 => "Icon 05";
+
+    public string Icon06 => "Icon 06";
+
+    public string Icon07 => "Icon 07";
+
+    public string Icon08 => "Icon 08";
+
+    public string Icon09 => "Icon 09";
+
+    public string Icon10 => "Icon 10";
+
+    public string Icon11 => "Icon 11";
+
+    public string Icon12 => "Icon 12";
+
+    public string Icon13 => "Icon 13";
+
+    public string IconPlus => "Customize";
 }

@@ -1,8 +1,8 @@
 ﻿
 
-namespace CustomizeFolderToolPlus.Forms
+namespace CustomizeFolderToolPlus
 {
-    partial class Remarks
+    partial class Comment
     {
         /// <summary>
         /// Required designer variable.
@@ -73,7 +73,7 @@ namespace CustomizeFolderToolPlus.Forms
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += this.Button2_Click;
             // 
-            // Remarks
+            // Comment
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
@@ -83,10 +83,10 @@ namespace CustomizeFolderToolPlus.Forms
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            this.Name = "Remarks";
+            this.Name = "Comment";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += this.Remarks_Load;
+            this.Load += this.Comment_Load;
             this.ResumeLayout(false);
             this.PerformLayout();
         }

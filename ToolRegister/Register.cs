@@ -43,25 +43,25 @@ public class Register
             regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d alias -lang {language.CodePage}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_03_ModifyIcon");
-            regCmd.SetValue("", language.ModifyIcon);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a icons -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey("_03_ChangeIcon");
+            regCmd.SetValue("", language.ChangeIcon);
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a icon -lang {language.CodePage}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_04_ClearIcon");
-            regCmd.SetValue("", language.ClearIcon);
+            regCmd = regMainMenu.CreateSubKey("_04_RestoreIcon");
+            regCmd.SetValue("", language.RestoreIcon);
             regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d icons -lang {language.CodePage}");
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d icon -lang {language.CodePage}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_05_AddRemark");
-            regCmd.SetValue("", language.AddRemark);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a remarks -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey("_05_AddComment");
+            regCmd.SetValue("", language.AddComment);
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a comment -lang {language.CodePage}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_06_RemoveRemark");
-            regCmd.SetValue("", language.RemoveRemark);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d remarks -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey("_06_RemoveComment");
+            regCmd.SetValue("", language.RemoveComment);
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d comment -lang {language.CodePage}");
             regCmd.Close();
 
         }

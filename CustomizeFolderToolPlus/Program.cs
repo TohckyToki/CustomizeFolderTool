@@ -12,7 +12,7 @@ namespace CustomizeFolderToolPlus
 
         private static string[] targets =
         {
-            "alias", "icons", "remarks",
+            "alias", "icon", "comment",
         };
 
         private static ILanguage[] languages =
@@ -38,13 +38,7 @@ namespace CustomizeFolderToolPlus
                 var target = args[2].ToLower();
                 var lang = args[4].ToLower();
                 var language = languages[0];
-                for (var i = 1; i < languages.Length; i++)
-                {
-                    if (lang == languages[i].CodePage.ToLower())
-                    {
-                        language = languages[i];
-                    }
-                }
+                language = languages.FirstOrDefault(x => x.CodePage.ToLower() == lang) ?? language;
 
                 if (behavior == "-a")
                 {
@@ -52,8 +46,8 @@ namespace CustomizeFolderToolPlus
                     IBaseForm? form = target switch
                     {
                         "alias" => new Alias(),
-                        "icons" => new Icons(),
-                        "remarks" => new Remarks(),
+                        "icon" => new Forms.Icon(),
+                        "comment" => new Comment(),
                         _ => default,
                     };
                     if (form != null)
@@ -69,8 +63,8 @@ namespace CustomizeFolderToolPlus
                     var desktop = target switch
                     {
                         "alias" => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
-                        "icons" => FolderTool.CreateDesktopFile(folder).DeleteIcons(),
-                        "remarks" => FolderTool.CreateDesktopFile(folder).DeleteRemarks(),
+                        "icon" => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
+                        "comment" => FolderTool.CreateDesktopFile(folder).DeleteComment(),
                         _ => default,
                     };
                     desktop?.Save();

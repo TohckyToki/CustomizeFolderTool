@@ -18,10 +18,40 @@ namespace CustomizeFolderToolPlus.Languages
 
         public string AliasMessage => "";
 
-        public string IconsTitle => "";
+        public string IconTitle => "";
 
-        public string RemarksTitle => "";
+        public string CommentTitle => "";
 
-        public string RemarksMessage => "";
+        public string CommentMessage => "";
+
+        public string IconDefault => "";
+
+        public string Icon01 => "";
+
+        public string Icon02 => "";
+
+        public string Icon03 => "";
+
+        public string Icon04 => "";
+
+        public string Icon05 => "";
+
+        public string Icon06 => "";
+
+        public string Icon07 => "";
+
+        public string Icon08 => "";
+
+        public string Icon09 => "";
+
+        public string Icon10 => "";
+
+        public string Icon11 => "";
+
+        public string Icon12 => "";
+
+        public string Icon13 => "";
+
+        public string IconPlus => "";
     }
 }

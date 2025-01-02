@@ -22,12 +22,12 @@ namespace ToolRegister.Languages
 
         public string DeleteAlias => "Delete Alias";
 
-        public string ModifyIcon => "Modify Icon";
+        public string ChangeIcon => "Change Icon";
 
-        public string ClearIcon => "Clear Icon";
+        public string RestoreIcon => "Restore Icon";
 
-        public string AddRemark => "Add Remark";
+        public string AddComment => "Add Comment";
 
-        public string RemoveRemark => "Remove Remark";
+        public string RemoveComment => "Remove Comment";
     }
 }

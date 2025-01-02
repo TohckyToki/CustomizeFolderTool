@@ -80,7 +80,7 @@ public class FolderTool
         return this;
     }
 
-    public FolderTool DeleteIcons()
+    public FolderTool DeleteIcon()
     {
         var section = this.CreateSectionData(ShellClassInfo);
         this.DeleteIconFile(section);
@@ -102,7 +102,7 @@ public class FolderTool
         }
     }
 
-    public FolderTool CreateRemarks(string tipinfo)
+    public FolderTool CreateComment(string tipinfo)
     {
         var section = this.CreateSectionData(ShellClassInfo);
         section.RemoveKey(InfoTip);
@@ -110,7 +110,7 @@ public class FolderTool
         return this;
     }
 
-    public FolderTool DeleteRemarks()
+    public FolderTool DeleteComment()
     {
         var section = this.CreateSectionData(ShellClassInfo);
         section.RemoveKey(InfoTip);

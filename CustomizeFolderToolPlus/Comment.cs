@@ -1,22 +1,23 @@
-using CustomizeFolderToolPlus.Languages;
+﻿using CustomizeFolderToolPlus.Languages;
 
 namespace CustomizeFolderToolPlus;
 
-public partial class Alias : Form, IBaseForm
+public partial class Comment : Form, IBaseForm
 {
     public string? FolderPath { get; set; }
     public ILanguage? Language { get; set; }
-    public Alias()
+
+    public Comment()
     {
         InitializeComponent();
     }
 
-    private void Alias_Load(object sender, EventArgs e)
+    private void Comment_Load(object sender, EventArgs e)
     {
         if (Language != null)
         {
-            this.Text = Language.AliasTitle;
-            this.label1.Text = Language.AliasMessage;
+            this.Text = Language.CommentTitle;
+            this.label1.Text = Language.CommentMessage;
             this.button1.Text = Language.ConfirmText;
             this.button2.Text = Language.CancelText;
         }
@@ -27,13 +28,13 @@ public partial class Alias : Form, IBaseForm
     {
         if (e.KeyCode == Keys.Enter)
         {
-            SaveAlias(textBox1.Text);
+            SaveComment(textBox1.Text);
         }
     }
 
     private void Button1_Click(object sender, EventArgs e)
     {
-        SaveAlias(textBox1.Text);
+        SaveComment(textBox1.Text);
     }
 
     private void Button2_Click(object sender, EventArgs e)
@@ -41,14 +42,14 @@ public partial class Alias : Form, IBaseForm
         this.Close();
     }
 
-    private void SaveAlias(string alias)
+    private void SaveComment(string remarks)
     {
-        if (string.IsNullOrEmpty(alias))
+        if (string.IsNullOrEmpty(remarks))
         {
             textBox1.Focus();
             return;
         }
-        FolderTool.CreateDesktopFile(this.FolderPath!).CreateAlias(alias).Save();
+        FolderTool.CreateDesktopFile(this.FolderPath!).CreateComment(remarks).Save();
         this.Close();
     }
 }

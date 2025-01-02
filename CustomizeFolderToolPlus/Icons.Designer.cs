@@ -1,4 +1,4 @@
-﻿namespace CustomizeFolderToolPlus.Forms
+﻿namespace CustomizeFolderToolPlus
 {
     partial class Icons
     {
@@ -29,11 +29,33 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Color";
+            this.panel1 = new Panel();
+            this.toolTip1 = new ToolTip(this.components);
+            this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = DockStyle.Fill;
+            this.panel1.Location = new Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new Size(380, 282);
+            this.panel1.TabIndex = 0;
+            // 
+            // Icons
+            // 
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(380, 282);
+            this.Controls.Add(this.panel1);
+            this.Name = "Icons";
+            this.Text = "Icons";
+            this.Load += this.Icons_Load;
+            this.ResumeLayout(false);
         }
 
         #endregion
+
+        private Panel panel1;
+        private ToolTip toolTip1;
     }
 }
