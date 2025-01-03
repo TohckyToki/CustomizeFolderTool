@@ -30,6 +30,10 @@ namespace ToolRegister.Languages
 
         public string RemoveComment => "Remove Comment";
 
+        public string RefreshFolder => "Refresh folder";
+
+        public string ResetFolder => "Reset folder";
+
         public string OpenToolPath => "Open register folder";
     }
 }

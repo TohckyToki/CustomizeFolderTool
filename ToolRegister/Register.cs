@@ -65,7 +65,18 @@ public class Register
             regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d comment -lang {language.CodePage}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_07_OpenToolPath");
+            regCmd = regMainMenu.CreateSubKey("_07_RefreshFolder");
+            regCmd.SetValue("", language.RefreshFolder);
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -ra");
+            regCmd.Close();
+
+            regCmd = regMainMenu.CreateSubKey("_08_ResetFolder");
+            regCmd.SetValue("", language.ResetFolder);
+            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
+            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -rs");
+            regCmd.Close();
+
+            regCmd = regMainMenu.CreateSubKey("_09_OpenToolPath");
             regCmd.SetValue("", language.OpenToolPath);
             regCmd.CreateSubKey("command").SetValue("", $@"explorer {installedPath}");
             regCmd.Close();

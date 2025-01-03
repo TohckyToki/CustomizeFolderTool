@@ -4,21 +4,22 @@ namespace CustomizeFolderToolPlus
 {
     internal static class Program
     {
-        private static string[] behaviors =
-        {
-            "-a", "-d",
-        };
+        private static string[][] behaviors =
+        [
+            ["-a", "-d",],
+            [ "-rs", "-ra", ]
+        ];
 
         private static string[] targets =
-        {
+        [
             "alias", "icon", "comment",
-        };
+        ];
 
         private static ILanguage[] languages =
-        {
+        [
             new English(),
             new Chinese(),
-        };
+        ];
 
         /// <summary>
         ///  The main entry point for the application.
@@ -28,7 +29,7 @@ namespace CustomizeFolderToolPlus
         {
             if (args?.Length > 4
                 && Directory.Exists(args[0])
-                && behaviors.Contains(args[1].ToLower())
+                && behaviors[0].Contains(args[1].ToLower())
                 && targets.Contains(args[2].ToLower())
                 && args[3].ToLower() == "-lang")
             {
@@ -69,6 +70,22 @@ namespace CustomizeFolderToolPlus
                     desktop?.Save();
                     Application.Exit();
                 }
+            }
+            else if (args?.Length > 1
+                && Directory.Exists(args[0])
+                && behaviors[1].Contains(args[1].ToLower()))
+            {
+                var folder = args[0];
+                var behavior = args[1].ToLower();
+                if (behavior == "-rs")
+                {
+                    FolderTool.DeleteDesktopFile(folder);
+                }
+                else if (behavior == "-ra")
+                {
+                    FolderTool.ApplyDesktopFile(folder);
+                }
+                Application.Exit();
             }
             else
             {

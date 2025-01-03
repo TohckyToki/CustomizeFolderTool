@@ -30,6 +30,10 @@ namespace ToolRegister.Languages
 
         public string RemoveComment => "删除备注";
 
+        public string RefreshFolder => "刷新文件夹";
+
+        public string ResetFolder => "重置文件夹";
+
         public string OpenToolPath => "打开注册文件夹";
     }
 }

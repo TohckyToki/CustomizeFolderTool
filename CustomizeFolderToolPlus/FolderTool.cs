@@ -1,6 +1,8 @@
 ﻿using IniParser;
 using IniParser.Model;
-
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -41,13 +43,25 @@ public class FolderTool
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
+            RefreshSystemFile(filePath);
+        }
+    }
+
+    public static void ApplyDesktopFile(string folderPath)
+    {
+        CheckAuthority(folderPath);
+        var filePath = Path.Combine(folderPath, DesktopFile);
+        if (File.Exists(filePath))
+        {
+            var tool = new FolderTool(filePath);
+            tool.Save();
         }
     }
 
     private FolderTool(string filePath)
     {
-        var parser = new FileIniDataParser();
         this._filePath = filePath;
+        var parser = new FileIniDataParser();
         this.data = parser.ReadFile(filePath);
     }
 
@@ -102,6 +116,10 @@ public class FolderTool
         }
     }
 
+    private void CreateResources()
+    {
+    }
+
     public FolderTool CreateComment(string tipinfo)
     {
         var section = this.CreateSectionData(ShellClassInfo);
@@ -125,17 +143,17 @@ public class FolderTool
         var fileInfo = new FileInfo(this._filePath);
         fileInfo.Attributes = FileAttributes.Normal;
         File.WriteAllText(this._filePath, this.data.ToString(), Encoding.Unicode);
-        this.RefreshSystemFile();
+        RefreshSystemFile(this._filePath);
     }
 
     #region External
-    private void RefreshSystemFile()
+    private static void RefreshSystemFile(string filePath)
     {
         LPSHFOLDERCUSTOMSETTINGS FolderSettings = new LPSHFOLDERCUSTOMSETTINGS();
 
         FolderSettings.dwMask = 0x40;
         uint FCS_FORCEWRITE = 0x00000002;
-        var pszPath = Path.GetDirectoryName(this._filePath)!;
+        var pszPath = Path.GetDirectoryName(filePath)!;
         _ = SHGetSetFolderCustomSettings(ref FolderSettings, pszPath, FCS_FORCEWRITE);
     }
 

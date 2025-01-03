@@ -15,6 +15,8 @@ namespace ToolRegister.Languages
         public string RestoreIcon { get; }
         public string AddComment { get; }
         public string RemoveComment { get; }
+        public string RefreshFolder { get; }
+        public string ResetFolder { get; }
         public string OpenToolPath { get; }
     }
 }
