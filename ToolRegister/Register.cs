@@ -61,7 +61,13 @@ public class Register
 
             regCmd = regMainMenu.CreateSubKey("_06_RemoveComment");
             regCmd.SetValue("", language.RemoveComment);
+            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
             regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d comment -lang {language.CodePage}");
+            regCmd.Close();
+
+            regCmd = regMainMenu.CreateSubKey("_07_OpenToolPath");
+            regCmd.SetValue("", language.OpenToolPath);
+            regCmd.CreateSubKey("command").SetValue("", $@"explorer {installedPath}");
             regCmd.Close();
 
         }

@@ -29,5 +29,7 @@ namespace ToolRegister.Languages
         public string AddComment => "Add Comment";
 
         public string RemoveComment => "Remove Comment";
+
+        public string OpenToolPath => "Open register folder";
     }
 }

@@ -29,5 +29,7 @@ namespace ToolRegister.Languages
         public string AddComment => "添加备注";
 
         public string RemoveComment => "删除备注";
+
+        public string OpenToolPath => "打开注册文件夹";
     }
 }
