@@ -27,5 +27,10 @@ public interface ILanguage : ILanguageBase
     public string Icon11 { get; }
     public string Icon12 { get; }
     public string Icon13 { get; }
-    public string IconPlus { get; }
+    public string IconAdd { get; }
+    public string IconAddTitle { get; }
+    public string IconAddIcoFilter { get; }
+    public string IconAddPngFilter { get; }
+    public string IconAddWarningTitle { get; }
+    public string IconAddWarningMessage { get; }
 }

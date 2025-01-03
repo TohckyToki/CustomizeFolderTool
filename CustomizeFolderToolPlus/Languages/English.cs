@@ -46,5 +46,16 @@ public class English : ILanguage
 
     public string Icon13 => "Icon 13";
 
-    public string IconPlus => "Customize";
+    public string IconAdd => "Customize";
+
+    public string IconAddTitle => "Choose a picture";
+
+    public string IconAddIcoFilter => "Ico file";
+
+    public string IconAddPngFilter => "Png file";
+
+    public string IconAddWarningTitle => "Info";
+
+    public string IconAddWarningMessage => "Only images with widths between 32 and 256 pixels are supported";
+
 }

@@ -38,16 +38,18 @@
             this.panel1.Dock = DockStyle.Fill;
             this.panel1.Location = new Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Size(380, 282);
+            this.panel1.Size = new Size(380, 232);
             this.panel1.TabIndex = 0;
             // 
             // Icons
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(380, 282);
+            this.ClientSize = new Size(380, 232);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             this.Name = "Icons";
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Icons";
             this.Load += this.Icons_Load;
             this.ResumeLayout(false);

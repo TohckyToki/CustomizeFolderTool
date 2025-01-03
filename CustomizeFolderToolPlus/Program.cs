@@ -1,4 +1,3 @@
-using CustomizeFolderToolPlus.Forms;
 using CustomizeFolderToolPlus.Languages;
 
 namespace CustomizeFolderToolPlus
@@ -46,7 +45,7 @@ namespace CustomizeFolderToolPlus
                     IBaseForm? form = target switch
                     {
                         "alias" => new Alias(),
-                        "icon" => new Forms.Icon(),
+                        "icon" => new Icons(),
                         "comment" => new Comment(),
                         _ => default,
                     };
