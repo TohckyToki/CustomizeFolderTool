@@ -1,8 +1,6 @@
 ﻿using IniParser;
 using IniParser.Model;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -11,6 +9,7 @@ namespace CustomizeFolderToolPlus;
 public class FolderTool
 {
     private const string DesktopFile = "desktop.ini";
+    private const string ResourceFile = "desktop.ini.res.dll";
 
     private const string ShellClassInfo = ".ShellClassInfo";
     private const string LocalizedResourceName = "LocalizedResourceName";
@@ -18,6 +17,7 @@ public class FolderTool
     private const string InfoTip = "InfoTip";
 
     private readonly string _filePath;
+    private readonly string _resourcesPath;
     private readonly IniData data;
 
     private static void CheckAuthority(string folderPath)
@@ -25,25 +25,57 @@ public class FolderTool
         //Todo: Check if user has permission to modify this folder.
     }
 
-    public static FolderTool CreateDesktopFile(string folderPath)
+    private static void CheckDesktopFile(string filePath)
     {
-        CheckAuthority(folderPath);
-        var filePath = Path.Combine(folderPath, DesktopFile);
         if (!File.Exists(filePath))
         {
             File.Create(filePath).Close();
         }
-        return new FolderTool(filePath);
+    }
+
+    private static void CheckResourceFile(string filePath)
+    {
+        var resourceFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Resources\\ToolResources.dll");
+        if (!File.Exists(filePath))
+        {
+            File.Copy(resourceFile, filePath);
+
+            new FileInfo(filePath)
+            {
+                Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
+            }.Refresh();
+        }
+    }
+
+    public static FolderTool CreateDesktopFile(string folderPath)
+    {
+        CheckAuthority(folderPath);
+        var filePath = Path.Combine(folderPath, DesktopFile);
+        var resourcesPath = Path.Combine(folderPath, ResourceFile);
+        CheckDesktopFile(filePath);
+        CheckResourceFile(resourcesPath);
+        return new FolderTool(filePath, resourcesPath);
     }
 
     public static void DeleteDesktopFile(string folderPath)
     {
         CheckAuthority(folderPath);
+        var deleteFlag = false;
+        var resourcesPath = Path.Combine(folderPath, ResourceFile);
+        if (File.Exists(resourcesPath))
+        {
+            File.Delete(resourcesPath);
+            deleteFlag = true;
+        }
         var filePath = Path.Combine(folderPath, DesktopFile);
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
-            RefreshSystemFile(filePath);
+            deleteFlag |= true;
+        }
+        if (deleteFlag)
+        {
+            ExplorerManager.RefreshFolder(folderPath);
         }
     }
 
@@ -53,14 +85,14 @@ public class FolderTool
         var filePath = Path.Combine(folderPath, DesktopFile);
         if (File.Exists(filePath))
         {
-            var tool = new FolderTool(filePath);
-            tool.Save();
+            ExplorerManager.RefreshFolder(folderPath);
         }
     }
 
-    private FolderTool(string filePath)
+    private FolderTool(string filePath, string resourcesPath)
     {
         this._filePath = filePath;
+        this._resourcesPath = resourcesPath;
         var parser = new FileIniDataParser();
         this.data = parser.ReadFile(filePath);
     }
@@ -69,6 +101,16 @@ public class FolderTool
     {
         this.data.Sections.AddSection(sectionName);
         return this.data.Sections[sectionName];
+    }
+
+    public FolderTool CreateAliasWithResource(string alias)
+    {
+        ResourcesManager.CreateStringResources(this._resourcesPath, 101, alias);
+
+        var section = this.CreateSectionData(ShellClassInfo);
+        section.RemoveKey(LocalizedResourceName);
+        section.AddKey(LocalizedResourceName, $"@{this._resourcesPath},-101");
+        return this;
     }
 
     public FolderTool CreateAlias(string alias)
@@ -94,6 +136,16 @@ public class FolderTool
         return this;
     }
 
+    public FolderTool CreateIconWithResource(byte[] iconData)
+    {
+        ResourcesManager.CreateIconResources(this._resourcesPath, 1, iconData);
+
+        var section = this.CreateSectionData(ShellClassInfo);
+        section.RemoveKey(IconResource);
+        section.AddKey(IconResource, $"@{this._resourcesPath},-1");
+        return this;
+    }
+
     public FolderTool DeleteIcon()
     {
         var section = this.CreateSectionData(ShellClassInfo);
@@ -114,10 +166,6 @@ public class FolderTool
             }
             section.RemoveKey(IconResource);
         }
-    }
-
-    private void CreateResources()
-    {
     }
 
     public FolderTool CreateComment(string tipinfo)
@@ -143,41 +191,9 @@ public class FolderTool
         var fileInfo = new FileInfo(this._filePath);
         fileInfo.Attributes = FileAttributes.Normal;
         File.WriteAllText(this._filePath, this.data.ToString(), Encoding.Unicode);
-        RefreshSystemFile(this._filePath);
+        var folder = Path.GetDirectoryName(this._filePath)!;
+        ExplorerManager.RefreshFolder(folder);
     }
 
-    #region External
-    private static void RefreshSystemFile(string filePath)
-    {
-        LPSHFOLDERCUSTOMSETTINGS FolderSettings = new LPSHFOLDERCUSTOMSETTINGS();
 
-        FolderSettings.dwMask = 0x40;
-        uint FCS_FORCEWRITE = 0x00000002;
-        var pszPath = Path.GetDirectoryName(filePath)!;
-        _ = SHGetSetFolderCustomSettings(ref FolderSettings, pszPath, FCS_FORCEWRITE);
-    }
-
-    [DllImport("Shell32.dll", CharSet = CharSet.Auto)]
-    private static extern uint SHGetSetFolderCustomSettings(ref LPSHFOLDERCUSTOMSETTINGS pfcs, string pszPath, uint dwReadWrite);
-
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    private struct LPSHFOLDERCUSTOMSETTINGS
-    {
-        public uint dwSize;
-        public uint dwMask;
-        public nint pvid;
-        public string pszWebViewTemplate;
-        public uint cchWebViewTemplate;
-        public string pszWebViewTemplateVersion;
-        public string pszInfoTip;
-        public uint cchInfoTip;
-        public nint pclsid;
-        public uint dwFlags;
-        public string pszIconFile;
-        public uint cchIconFile;
-        public int iIconIndex;
-        public string pszLogo;
-        public uint cchLogo;
-    }
-    #endregion
 }

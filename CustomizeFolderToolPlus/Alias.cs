@@ -48,7 +48,8 @@ public partial class Alias : Form, IBaseForm
             textBox1.Focus();
             return;
         }
-        FolderTool.CreateDesktopFile(this.FolderPath!).CreateAlias(alias).Save();
+        //FolderTool.CreateDesktopFile(this.FolderPath!).CreateAlias(alias).Save();
+        FolderTool.CreateDesktopFile(this.FolderPath!).CreateAliasWithResource(alias).Save();
         this.Close();
     }
 }

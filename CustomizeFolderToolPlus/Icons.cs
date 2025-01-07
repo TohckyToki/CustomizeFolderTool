@@ -77,15 +77,22 @@ public partial class Icons : Form, IBaseForm
     {
         var icon = (Icon)((Button)sender!).Tag!;
 
-        string iconPath = this.GenerateNewIconFileName();
+        //string iconPath = this.GenerateNewIconFileName();
+        //var fs = File.Create(iconPath);
+        //new Icon(icon, new Size(256, 256)).Save(fs);
+        //fs.Close();
+        //new FileInfo(iconPath)
+        //{
+        //    Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
+        //}.Refresh();
+        //FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
 
-        new Icon(icon, new Size(256, 256)).Save(File.Create(iconPath));
-        var fileInfo = new FileInfo(iconPath)
-        {
-            Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
-        };
-        fileInfo.Refresh();
-        FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
+        var ms = new MemoryStream();
+        new Icon(icon, new Size(256, 256)).Save(ms);
+        var data = ms.ToArray();
+        ms.Close();
+        FolderTool.CreateDesktopFile(this.FolderPath!).CreateIconWithResource(data).Save();
+
         this.Close();
     }
 
@@ -124,25 +131,32 @@ public partial class Icons : Form, IBaseForm
         });
         if (ofd.ShowDialog(this) == DialogResult.OK)
         {
-            var iconPath = this.GenerateNewIconFileName();
-            using (FileStream stream = File.OpenWrite(iconPath))
+            var icon = Path.GetExtension(ofd.FileName) switch
             {
-                switch (Path.GetExtension(ofd.FileName))
-                {
-                    case ".ico":
-                        new Icon(ofd.FileName!).Save(stream);
-                        break;
-                    case ".png":
-                        this.IconFromImage(Image.FromFile(ofd.FileName!)).Save(stream);
-                        break;
-                }
-                new FileInfo(iconPath)
-                {
-                    Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
-                }.Refresh();
-                FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
+                ".ico" => new Icon(ofd.FileName!),
+                ".png" => this.IconFromImage(Image.FromFile(ofd.FileName!)),
+                _ => null,
+            };
+            if (icon != null)
+            {
+                //var iconPath = this.GenerateNewIconFileName();
+                //var fs = File.Create(iconPath);
+                //icon.Save(fs);
+                //fs.Close();
+                //new FileInfo(iconPath)
+                //{
+                //    Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
+                //}.Refresh();
+                //FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
+
+                var ms = new MemoryStream();
+                icon.Save(ms);
+                var data = ms.ToArray();
+                ms.Close();
+                FolderTool.CreateDesktopFile(this.FolderPath!).CreateIconWithResource(data).Save();
+
+                this.Close();
             }
-            this.Close();
         }
 
     }
