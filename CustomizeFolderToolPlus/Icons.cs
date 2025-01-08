@@ -1,11 +1,12 @@
-﻿using CustomizeFolderToolPlus.Properties;
+﻿using CustomizeFolderToolPlus.Interfaces;
+using CustomizeFolderToolPlus.Properties;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using ToolLib.Languages.Tool;
 
 namespace CustomizeFolderToolPlus;
 
-public partial class Icons : Form, IBaseForm
+public partial class Icons : Form, IFormBase
 {
     public string? FolderPath { get; set; }
     public ILanguage? Language { get; set; }

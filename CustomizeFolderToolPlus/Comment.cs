@@ -1,8 +1,9 @@
-﻿using ToolLib.Languages.Tool;
+﻿using CustomizeFolderToolPlus.Interfaces;
+using ToolLib.Languages.Tool;
 
 namespace CustomizeFolderToolPlus;
 
-public partial class Comment : Form, IBaseForm
+public partial class Comment : Form, IFormBase
 {
     public string? FolderPath { get; set; }
     public ILanguage? Language { get; set; }

@@ -1,8 +1,8 @@
 ﻿using ToolLib.Languages.Tool;
 
-namespace CustomizeFolderToolPlus
+namespace CustomizeFolderToolPlus.Interfaces
 {
-    internal interface IBaseForm
+    internal interface IFormBase
     {
         public string? FolderPath { get; set; }
         public ILanguage? Language { get; set; }

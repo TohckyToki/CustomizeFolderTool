@@ -1,3 +1,4 @@
+using CustomizeFolderToolPlus.Interfaces;
 using ToolLib.Languages.Tool;
 
 namespace CustomizeFolderToolPlus
@@ -43,7 +44,7 @@ namespace CustomizeFolderToolPlus
                 if (behavior == "-a")
                 {
                     ApplicationConfiguration.Initialize();
-                    IBaseForm? form = target switch
+                    IFormBase? form = target switch
                     {
                         "alias" => new Alias(),
                         "icon" => new Icons(),
