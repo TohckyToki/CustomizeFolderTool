@@ -23,6 +23,7 @@ public class FolderTool
     private static void CheckAuthority(string folderPath)
     {
         //Todo: Check if user has permission to modify this folder.
+        DirectoryInfo folderInfo = new DirectoryInfo(folderPath);
     }
 
     private static void CheckDesktopFile(string filePath)

@@ -1,144 +1,79 @@
-﻿using Microsoft.Win32;
-using ToolRegister.Languages;
+using ToolLib;
+using ToolLib.Languages.Register;
 
 namespace ToolRegister;
 
-public class Register
+public partial class Register : Form
 {
-    private RegistryKey regDirectory { get; }
+    private ILanguage Language = new English();
 
-    public Register(bool isAdmin)
+    public Register()
     {
-        this.regDirectory = isAdmin
-            ? Registry.ClassesRoot.CreateSubKey("Directory")
-            : Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("Classes").CreateSubKey("Directory");
+        InitializeComponent();
     }
 
-    public void Add(ILanguage language)
+    private void Register_Load(object sender, EventArgs e)
     {
-        this.Delete(false);
+        comboBox1.SelectedIndex = 0;
+        CheckRegisterState();
+    }
 
-        var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-        var exePath = Path.Combine(installedPath, $"{nameof(CustomizeFolderToolPlus)}.exe");
-        var regMainMenu = default(RegistryKey);
-        var regCmd = default(RegistryKey);
-        try
+    private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (comboBox1.SelectedIndex == 0)
         {
-            regMainMenu = this.regDirectory.CreateSubKey("shell").CreateSubKey("CustomizeFolderTool");
-            regMainMenu.SetValue("", "CustomizeFolderTool");
-            regMainMenu.SetValue("Icon", Path.Combine(installedPath, "Assets", "CustomizeFolderTool.ico"), RegistryValueKind.String);
-            regMainMenu.SetValue("ExtendedSubCommandsKey", @"Directory\ContextMenus\CustomizeFolderTool", RegistryValueKind.String);
-            regMainMenu.Close();
-
-            regMainMenu = this.regDirectory.CreateSubKey("ContextMenus").CreateSubKey("CustomizeFolderTool").CreateSubKey("shell");
-
-            regCmd = regMainMenu.CreateSubKey("_01_AddAlias");
-            regCmd.SetValue("", language.AddAlias);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a alias -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_02_DeleteAlias");
-            regCmd.SetValue("", language.DeleteAlias);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d alias -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_03_ChangeIcon");
-            regCmd.SetValue("", language.ChangeIcon);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a icon -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_04_RestoreIcon");
-            regCmd.SetValue("", language.RestoreIcon);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d icon -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_05_AddComment");
-            regCmd.SetValue("", language.AddComment);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a comment -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_06_RemoveComment");
-            regCmd.SetValue("", language.RemoveComment);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d comment -lang {language.CodePage}");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_07_RefreshFolder");
-            regCmd.SetValue("", language.RefreshFolder);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -ra");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_08_ResetFolder");
-            regCmd.SetValue("", language.ResetFolder);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -rs");
-            regCmd.Close();
-
-            regCmd = regMainMenu.CreateSubKey("_09_OpenToolPath");
-            regCmd.SetValue("", language.OpenToolPath);
-            regCmd.CreateSubKey("command").SetValue("", $@"explorer {installedPath}");
-            regCmd.Close();
-
+            Language = new English();
+            SetLanguage();
         }
-        catch (Exception)
+        else if (comboBox1.SelectedIndex == 1)
         {
-        }
-        finally
-        {
-            regCmd?.Close();
-            regMainMenu?.Close();
-            this.regDirectory.Close();
+            Language = new Chinese();
+            SetLanguage();
         }
     }
 
-    public void Delete(bool needClose = true)
+    private void checkBox1_CheckedChanged(object sender, EventArgs e)
     {
-        try
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        var register = checkBox1.Checked ? new RegistryManager(true) : new RegistryManager(false);
+        register.Add(Language);
+        CheckRegisterState();
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+        var register = checkBox1.Checked ? new RegistryManager(true) : new RegistryManager(false);
+        register.Delete();
+        CheckRegisterState();
+    }
+
+    private void CheckRegisterState()
+    {
+        switch (RegistryManager.CheckRegisterState())
         {
-            if (this.regDirectory.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null)
-            {
-                this.regDirectory.CreateSubKey("shell").DeleteSubKeyTree("CustomizeFolderTool");
-            }
-            if (this.regDirectory.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null)
-            {
-                this.regDirectory.CreateSubKey("ContextMenus").DeleteSubKeyTree("CustomizeFolderTool");
-            }
-        }
-        catch (Exception)
-        {
-        }
-        finally
-        {
-            if (needClose)
-            {
-                this.regDirectory.Close();
-            }
+            case RegistryManager.RegisterState.User:
+            case RegistryManager.RegisterState.Admin:
+                checkBox1.Enabled = false;
+                button1.Enabled = false;
+                button2.Enabled = true;
+                break;
+            case RegistryManager.RegisterState.None:
+            default:
+                checkBox1.Enabled = true;
+                button1.Enabled = true;
+                button2.Enabled = false;
+                break;
         }
     }
 
-    public static RegisterState CheckRegisterState()
+    private void SetLanguage()
     {
-        var result = 0;
-
-        var user = Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("Classes").CreateSubKey("Directory");
-        result = user.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 1 : user.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 1 : result;
-
-        var admin = Registry.ClassesRoot.CreateSubKey("Directory");
-        result = admin.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 2 : admin.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 2 : result;
-
-        return (RegisterState)result;
-    }
-
-    public enum RegisterState
-    {
-        None,
-        User,
-        Admin
+        label1.Text = Language.LanguageTitle;
+        button1.Text = Language.Register;
+        button2.Text = Language.Unregister;
+        checkBox1.Text = Language.Admin;
     }
 }

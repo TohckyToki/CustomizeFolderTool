@@ -1,6 +1,6 @@
 ﻿namespace ToolRegister
 {
-    partial class Form1
+    partial class Register
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Register));
             button1 = new Button();
             button2 = new Button();
             label1 = new Label();
@@ -100,10 +100,10 @@
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form1";
+            Name = "Register";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ToolRegister";
-            Load += Form1_Load;
+            Load += Register_Load;
             ResumeLayout(false);
             PerformLayout();
         }

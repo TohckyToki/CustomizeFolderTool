@@ -1,9 +1,7 @@
-﻿using CustomizeFolderToolPlus.Languages;
-using System.Diagnostics;
+﻿using CustomizeFolderToolPlus.Properties;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Resources;
-using System.Windows.Forms;
+using ToolLib.Languages.Tool;
 
 namespace CustomizeFolderToolPlus;
 
@@ -12,11 +10,9 @@ public partial class Icons : Form, IBaseForm
     public string? FolderPath { get; set; }
     public ILanguage? Language { get; set; }
 
-    private ResourceManager resourceManager;
     public Icons()
     {
         this.InitializeComponent();
-        this.resourceManager = new ResourceManager(typeof(Icons));
     }
 
     private void Icons_Load(object sender, EventArgs e)
@@ -26,24 +22,24 @@ public partial class Icons : Form, IBaseForm
             this.Text = this.Language.IconTitle;
         }
 
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.IconDefault))!, this.Language!.IconDefault, 10, 10).Click += this.Default_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon01))!, this.Language.Icon01, 84, 10).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon02))!, this.Language.Icon02, 158, 10).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon03))!, this.Language.Icon03, 232, 10).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon04))!, this.Language.Icon04, 306, 10).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon05))!, this.Language.Icon05, 10, 84).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon06))!, this.Language.Icon06, 84, 84).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon07))!, this.Language.Icon07, 158, 84).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon08))!, this.Language.Icon08, 232, 84).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon09))!, this.Language.Icon09, 306, 84).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon10))!, this.Language.Icon10, 10, 158).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon11))!, this.Language.Icon11, 84, 158).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon12))!, this.Language.Icon12, 158, 158).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.Icon13))!, this.Language.Icon13, 232, 158).Click += this.Colors_Click;
-        this.AddButton((Icon)this.resourceManager.GetObject(nameof(ILanguage.IconAdd))!, this.Language.IconAdd, 306, 158).Click += this.Customize_Click;
+        this.AddButton(Resources.IconDefault, this.Language!.IconDefault, 10, 10).Click += this.Default_Click;
+        this.AddButton(Resources.Icon01, this.Language.Icon01, 84, 10).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon02, this.Language.Icon02, 158, 10).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon03, this.Language.Icon03, 232, 10).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon04, this.Language.Icon04, 306, 10).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon05, this.Language.Icon05, 10, 84).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon06, this.Language.Icon06, 84, 84).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon07, this.Language.Icon07, 158, 84).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon08, this.Language.Icon08, 232, 84).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon09, this.Language.Icon09, 306, 84).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon10, this.Language.Icon10, 10, 158).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon11, this.Language.Icon11, 84, 158).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon12, this.Language.Icon12, 158, 158).Click += this.Colors_Click;
+        this.AddButton(Resources.Icon13, this.Language.Icon13, 232, 158).Click += this.Colors_Click;
+        this.AddButton(Resources.IconAdd, this.Language.IconAdd, 306, 158).Click += this.Customize_Click;
 
         //Modify icon of last button.
-        var newicon = new Icon((Icon)this.resourceManager.GetObject(nameof(ILanguage.IconAdd))!, new Size(256, 256));
+        var newicon = new Icon(Resources.IconAdd, new Size(256, 256));
         var bitmap = this.ResizeImage(newicon.ToBitmap(), 40, 40);
         ((Button)this.panel1.Controls[this.panel1.Controls.Count - 1]).BackgroundImage = bitmap;
     }

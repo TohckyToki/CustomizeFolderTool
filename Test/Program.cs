@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
-using System.Text;
-using Vestris.ResourceLib;
+using ToolLib;
 
 namespace Test
 {
@@ -8,17 +7,20 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            var file = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-                "ToolResources.dll");
-            var icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-                "IconDefault.ico");
+            var file = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "ToolResources.dll");
+            var icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Icon02.ico");
 
-            ResourcesManager.CreateIconResources(file, 1, File.ReadAllBytes(icon));
-            ResourcesManager.CreateStringResources(file, 1, "ASD");
+            ResourcesManager.CreateStringResources(file, 1, "QWE");
+            ResourcesManager.CreateIconResources(file, 0, File.ReadAllBytes(icon));
 
-            // IconFile iconFile = new IconFile(icon);
-            // IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
-            // iconDirectoryResource.SaveTo(file);
+            var folder = @"D:\test\zzz";
+            FolderManager.SetInfoTip(folder, null);
+            FolderManager.SetIcon(folder, file, 0);
+            FolderManager.SetLocalizedName(folder, file, 1);
+            var flags = FolderManager.GetFlags(folder);
+
+            Console.WriteLine(flags);
+
         }
     }
 }
