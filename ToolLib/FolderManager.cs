@@ -25,6 +25,12 @@ public static class FolderManager
         _ = SHGetSetFolderCustomSettings(ref FolderSettings, folderPath, (uint)FCS.FCS_FORCEWRITE);
     }
 
+    public static void RefreshFolder(string folderPath)
+    {
+        var flag = GetFlags(folderPath);
+        SetFlags(folderPath, flag);
+    }
+
     public static void SetInfoTip(string folderPath, string infoTip)
     {
         var FolderSettings = new LPSHFOLDERCUSTOMSETTINGS

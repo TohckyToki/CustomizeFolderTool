@@ -3,6 +3,7 @@ using IniParser.Model;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using ToolLib;
 
 namespace CustomizeFolderToolPlus;
 
@@ -76,7 +77,7 @@ public class FolderTool
         }
         if (deleteFlag)
         {
-            ExplorerManager.RefreshFolder(folderPath);
+            FolderManager.RefreshFolder(folderPath);
         }
     }
 
@@ -86,7 +87,7 @@ public class FolderTool
         var filePath = Path.Combine(folderPath, DesktopFile);
         if (File.Exists(filePath))
         {
-            ExplorerManager.RefreshFolder(folderPath);
+            FolderManager.RefreshFolder(folderPath);
         }
     }
 
@@ -193,8 +194,6 @@ public class FolderTool
         fileInfo.Attributes = FileAttributes.Normal;
         File.WriteAllText(this._filePath, this.data.ToString(), Encoding.Unicode);
         var folder = Path.GetDirectoryName(this._filePath)!;
-        ExplorerManager.RefreshFolder(folder);
+        FolderManager.RefreshFolder(folder);
     }
-
-
 }

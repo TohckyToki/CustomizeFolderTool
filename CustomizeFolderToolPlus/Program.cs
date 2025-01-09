@@ -1,97 +1,97 @@
+using CustomizeFolderToolPlus.Forms;
 using CustomizeFolderToolPlus.Interfaces;
 using ToolLib.Languages.Tool;
 
-namespace CustomizeFolderToolPlus
+namespace CustomizeFolderToolPlus;
+
+internal static class Program
 {
-    internal static class Program
+    private static string[][] behaviors =
+    [
+        ["-a", "-d",],
+        [ "-rs", "-ra", ]
+    ];
+
+    private static string[] targets =
+    [
+        "alias", "icon", "comment",
+    ];
+
+    private static ILanguage[] languages =
+    [
+        new English(),
+        new Chinese(),
+    ];
+
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main(string[]? args)
     {
-        private static string[][] behaviors =
-        [
-            ["-a", "-d",],
-            [ "-rs", "-ra", ]
-        ];
-
-        private static string[] targets =
-        [
-            "alias", "icon", "comment",
-        ];
-
-        private static ILanguage[] languages =
-        [
-            new English(),
-            new Chinese(),
-        ];
-
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main(string[]? args)
+        if (args?.Length > 4
+            && Directory.Exists(args[0])
+            && behaviors[0].Contains(args[1].ToLower())
+            && targets.Contains(args[2].ToLower())
+            && args[3].ToLower() == "-lang")
         {
-            if (args?.Length > 4
-                && Directory.Exists(args[0])
-                && behaviors[0].Contains(args[1].ToLower())
-                && targets.Contains(args[2].ToLower())
-                && args[3].ToLower() == "-lang")
+            var folder = args[0];
+            var behavior = args[1].ToLower();
+            var target = args[2].ToLower();
+            var lang = args[4].ToLower();
+            var language = languages[0];
+            language = languages.FirstOrDefault(x => x.CodePage.ToLower() == lang) ?? language;
+
+            if (behavior == "-a")
             {
-                var folder = args[0];
-                var behavior = args[1].ToLower();
-                var target = args[2].ToLower();
-                var lang = args[4].ToLower();
-                var language = languages[0];
-                language = languages.FirstOrDefault(x => x.CodePage.ToLower() == lang) ?? language;
-
-                if (behavior == "-a")
+                ApplicationConfiguration.Initialize();
+                IFormBase? form = target switch
                 {
-                    ApplicationConfiguration.Initialize();
-                    IFormBase? form = target switch
-                    {
-                        "alias" => new Alias(),
-                        "icon" => new Icons(),
-                        "comment" => new Comment(),
-                        _ => default,
-                    };
-                    if (form != null)
-                    {
-                        form.FolderPath = folder;
-                        form.Language = language;
-
-                        Application.Run((Form)form);
-                    }
-                }
-                else if (behavior == "-d")
+                    "alias" => new Alias(),
+                    "icon" => new Icons(),
+                    "comment" => new Comment(),
+                    _ => default,
+                };
+                if (form != null)
                 {
-                    var desktop = target switch
-                    {
-                        "alias" => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
-                        "icon" => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
-                        "comment" => FolderTool.CreateDesktopFile(folder).DeleteComment(),
-                        _ => default,
-                    };
-                    desktop?.Save();
-                    Application.Exit();
+                    form.FolderPath = folder;
+                    form.Language = language;
+
+                    Application.Run((Form)form);
                 }
             }
-            else if (args?.Length > 1
-                && Directory.Exists(args[0])
-                && behaviors[1].Contains(args[1].ToLower()))
+            else if (behavior == "-d")
             {
-                var folder = args[0];
-                var behavior = args[1].ToLower();
-                if (behavior == "-rs")
+                var desktop = target switch
                 {
-                    FolderTool.DeleteDesktopFile(folder);
-                }
-                else if (behavior == "-ra")
-                {
-                    FolderTool.ApplyDesktopFile(folder);
-                }
+                    "alias" => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
+                    "icon" => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
+                    "comment" => FolderTool.CreateDesktopFile(folder).DeleteComment(),
+                    _ => default,
+                };
+                desktop?.Save();
                 Application.Exit();
             }
-            else
+        }
+        else if (args?.Length > 1
+            && Directory.Exists(args[0])
+            && behaviors[1].Contains(args[1].ToLower()))
+        {
+            var folder = args[0];
+            var behavior = args[1].ToLower();
+            if (behavior == "-rs")
             {
-                Application.Exit();
+                FolderTool.DeleteDesktopFile(folder);
             }
+            else if (behavior == "-ra")
+            {
+                FolderTool.ApplyDesktopFile(folder);
+            }
+            Application.Exit();
+        }
+        else
+        {
+            Application.Exit();
         }
     }
 }

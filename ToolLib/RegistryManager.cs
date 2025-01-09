@@ -23,19 +23,19 @@ public class RegistryManager
         this.Delete(false);
 
         var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-        var exePath = Path.Combine(installedPath, ExeFileName);
-        var resourcesPath = Path.Combine(installedPath, "Resc");
+        var exePath = Path.Combine(installedPath, ToolExeFileName);
+        var resourcesPath = Path.Combine(installedPath, ResourcesFolder);
         var regMainMenu = default(RegistryKey);
         var regCmd = default(RegistryKey);
         try
         {
-            regMainMenu = this.regDirectory.CreateSubKey("shell").CreateSubKey("CustomizeFolderTool");
-            regMainMenu.SetValue("", "CustomizeFolderTool");
-            regMainMenu.SetValue("Icon", Path.Combine(installedPath, "CustomizeFolderTool.ico"), RegistryValueKind.String);
+            regMainMenu = this.regDirectory.CreateSubKey("shell").CreateSubKey(ToolName);
+            regMainMenu.SetValue(string.Empty, ToolName);
+            regMainMenu.SetValue("Icon", Path.Combine(installedPath, ToolIconFileName), RegistryValueKind.String);
             regMainMenu.SetValue("ExtendedSubCommandsKey", @"Directory\ContextMenus\CustomizeFolderTool", RegistryValueKind.String);
             regMainMenu.Close();
 
-            regMainMenu = this.regDirectory.CreateSubKey("ContextMenus").CreateSubKey("CustomizeFolderTool").CreateSubKey("shell");
+            regMainMenu = this.regDirectory.CreateSubKey("ContextMenus").CreateSubKey(ToolName).CreateSubKey("shell");
 
             regCmd = regMainMenu.CreateSubKey("_01_AddAlias");
             regCmd.SetValue("", language.AddAlias);
@@ -86,7 +86,7 @@ public class RegistryManager
             regCmd.CreateSubKey("command").SetValue("", $@"explorer {installedPath}");
             regCmd.Close();
 
-            Environment.SetEnvironmentVariable(EnvName, "", EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(EnvName, resourcesPath, target);
         }
         catch (Exception)
         {
@@ -111,6 +111,8 @@ public class RegistryManager
             {
                 this.regDirectory.CreateSubKey("ContextMenus").DeleteSubKeyTree("CustomizeFolderTool");
             }
+
+            Environment.SetEnvironmentVariable(EnvName, null, target);
         }
         catch (Exception)
         {

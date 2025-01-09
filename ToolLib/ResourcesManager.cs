@@ -136,7 +136,7 @@ public static class ResourcesManager
                 // Grab the structure.
                 var entry =
                     (ICONDIRENTRY)Marshal.PtrToStructure(
-                        new nint(pinnedBytes.AddrOfPinnedObject().ToInt64() + offset + size * i),
+                        new nint(pinnedBytes.AddrOfPinnedObject().ToInt64() + offset + (size * i)),
                         iconDirEntryType)!;
                 iconEntry[i] = entry;
                 // Grab the associated pixel data.
@@ -170,7 +170,7 @@ public static class ResourcesManager
                 grpEntry.BytesInRes = iconEntry[i].BytesInRes;
                 grpEntry.ID = Convert.ToUInt16(baseId + i);
                 Marshal.StructureToPtr(grpEntry,
-                    new nint(pinnedData.AddrOfPinnedObject().ToInt64() + offset + size * i),
+                    new nint(pinnedData.AddrOfPinnedObject().ToInt64() + offset + (size * i)),
                     false);
             }
 
@@ -179,8 +179,26 @@ public static class ResourcesManager
         }
     }
 
+    private static void UnlockFile(string resourceFile)
+    {
+        new FileInfo(resourceFile)
+        {
+            Attributes = FileAttributes.Normal
+        }.Refresh();
+    }
+
+    private static void LockFile(string resourceFile)
+    {
+        new FileInfo(resourceFile)
+        {
+            Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
+        }.Refresh();
+    }
+
     public static void CreateStringResources(string resourceFile, int id, string value)
     {
+        UnlockFile(resourceFile);
+
         var handlePtr = BeginUpdateResource(resourceFile, false);
 
         if (handlePtr == nint.Zero)
@@ -194,11 +212,15 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handlePtr, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
+
+        LockFile(resourceFile);
     }
 
-    public static void DeleteTextResources(string resourcePath, int id)
+    public static void DeleteTextResources(string resourceFile, int id)
     {
-        var handlePtr = BeginUpdateResource(resourcePath, false);
+        UnlockFile(resourceFile);
+
+        var handlePtr = BeginUpdateResource(resourceFile, false);
 
         if (handlePtr == nint.Zero)
             throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -208,11 +230,15 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handlePtr, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
+
+        LockFile(resourceFile);
     }
 
-    public static void CreateIconResources(string resourcePath, int id, byte[] value)
+    public static void CreateIconResources(string resourceFile, int id, byte[] value)
     {
-        var handleExe = BeginUpdateResource(resourcePath, false);
+        UnlockFile(resourceFile);
+
+        var handleExe = BeginUpdateResource(resourceFile, false);
 
         if (handleExe == nint.Zero)
             throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -231,11 +257,15 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handleExe, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
+
+        LockFile(resourceFile);
     }
 
-    public static void DeleteIconResources(string resourcePath, int id)
+    public static void DeleteIconResources(string resourceFile, int id)
     {
-        var handleExe = BeginUpdateResource(resourcePath, false);
+        UnlockFile(resourceFile);
+
+        var handleExe = BeginUpdateResource(resourceFile, false);
 
         if (handleExe == nint.Zero)
             throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -245,6 +275,8 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handleExe, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
+
+        LockFile(resourceFile);
     }
 
     #region External

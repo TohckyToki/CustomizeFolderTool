@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using ToolLib.Languages.Tool;
 
-namespace CustomizeFolderToolPlus;
+namespace CustomizeFolderToolPlus.Forms;
 
 public partial class Icons : Form, IFormBase
 {
