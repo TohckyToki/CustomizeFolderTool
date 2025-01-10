@@ -1,5 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using static ToolLib.Constants;
 
 namespace ToolLib;
 
@@ -67,6 +67,11 @@ public static class FolderManager
         _ = SHSetLocalizedName(folderPath, resFile, stringIndex);
     }
 
+    public static void RemoveLocalizedName(string folderPath, string resFile, int stringIndex)
+    {
+        _ = SHSetLocalizedName(folderPath, null, stringIndex);
+    }
+
     #region External
     private enum FCSM
     {
@@ -113,10 +118,10 @@ public static class FolderManager
         public uint cchLogo;
     }
 
-    [DllImport("Shell32.dll", CharSet = CharSet.Auto)]
+    [DllImport(Shell32, CharSet = CharSet.Auto)]
     private static extern uint SHGetSetFolderCustomSettings(ref LPSHFOLDERCUSTOMSETTINGS pfcs, string pszPath, uint dwReadWrite);
 
-    [DllImport("Shell32.dll", CharSet = CharSet.Auto)]
+    [DllImport(Shell32, CharSet = CharSet.Auto)]
     private static extern uint SHSetLocalizedName(string path, string resourcePath, int resourceID);
     #endregion
 }

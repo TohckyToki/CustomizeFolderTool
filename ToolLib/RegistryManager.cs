@@ -12,8 +12,8 @@ public class RegistryManager
     public RegistryManager(bool isAdmin)
     {
         this.regDirectory = isAdmin
-            ? Registry.ClassesRoot.CreateSubKey("Directory")
-            : Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("Classes").CreateSubKey("Directory");
+            ? Registry.ClassesRoot.CreateSubKey(RegistryValue.Directory)
+            : Registry.CurrentUser.CreateSubKey(RegistryValue.Software).CreateSubKey(RegistryValue.Classes).CreateSubKey(RegistryValue.Directory);
 
         this.target = isAdmin ? EnvironmentVariableTarget.Machine : EnvironmentVariableTarget.User;
     }
@@ -23,70 +23,72 @@ public class RegistryManager
         this.Delete(false);
 
         var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-        var exePath = Path.Combine(installedPath, ToolExeFileName);
-        var resourcesPath = Path.Combine(installedPath, ResourcesFolder);
+        var baseCommand = $"{Path.Combine(installedPath, ToolExeFileName)} {RegistryValue.CurrentLocation}";
+        var languageSetting = $"{ToolCommand.Language} {language.CodePage}";
         var regMainMenu = default(RegistryKey);
         var regCmd = default(RegistryKey);
         try
         {
-            regMainMenu = this.regDirectory.CreateSubKey("shell").CreateSubKey(ToolName);
+            regMainMenu = this.regDirectory.CreateSubKey(RegistryValue.Shell).CreateSubKey(ToolName);
             regMainMenu.SetValue(string.Empty, ToolName);
-            regMainMenu.SetValue("Icon", Path.Combine(installedPath, ToolIconFileName), RegistryValueKind.String);
-            regMainMenu.SetValue("ExtendedSubCommandsKey", @"Directory\ContextMenus\CustomizeFolderTool", RegistryValueKind.String);
+            regMainMenu.SetValue(RegistryValue.Icon, Path.Combine(installedPath, ToolIconFileName), RegistryValueKind.String);
+            regMainMenu.SetValue(RegistryValue.ExtendedSubCommandsKey, @$"{RegistryValue.Directory}\{RegistryValue.ContextMenus}\{ToolName}", RegistryValueKind.String);
             regMainMenu.Close();
 
-            regMainMenu = this.regDirectory.CreateSubKey("ContextMenus").CreateSubKey(ToolName).CreateSubKey("shell");
+            regMainMenu = this.regDirectory.CreateSubKey(RegistryValue.ContextMenus).CreateSubKey(ToolName).CreateSubKey(RegistryValue.Shell);
 
-            regCmd = regMainMenu.CreateSubKey("_01_AddAlias");
-            regCmd.SetValue("", language.AddAlias);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a alias -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._01_AddAlias);
+            regCmd.SetValue(string.Empty, language.AddAlias);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Add} {ToolCommand.Alias} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_02_DeleteAlias");
-            regCmd.SetValue("", language.DeleteAlias);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d alias -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._02_DeleteAlias);
+            regCmd.SetValue(string.Empty, language.DeleteAlias);
+            regCmd.SetValue(RegistryValue.CommandFlags, 0x40, RegistryValueKind.DWord);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Delete} {ToolCommand.Alias} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_03_ChangeIcon");
-            regCmd.SetValue("", language.ChangeIcon);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a icon -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._03_ChangeIcon);
+            regCmd.SetValue(string.Empty, language.ChangeIcon);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Add} {ToolCommand.Icon} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_04_RestoreIcon");
-            regCmd.SetValue("", language.RestoreIcon);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d icon -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._04_RestoreIcon);
+            regCmd.SetValue(string.Empty, language.RestoreIcon);
+            regCmd.SetValue(RegistryValue.CommandFlags, 0x40, RegistryValueKind.DWord);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Delete} {ToolCommand.Icon} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_05_AddComment");
-            regCmd.SetValue("", language.AddComment);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -a comment -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._05_AddComment);
+            regCmd.SetValue(string.Empty, language.AddComment);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Add} {ToolCommand.Comment} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_06_RemoveComment");
-            regCmd.SetValue("", language.RemoveComment);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -d comment -lang {language.CodePage}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._06_RemoveComment);
+            regCmd.SetValue(string.Empty, language.RemoveComment);
+            regCmd.SetValue(RegistryValue.CommandFlags, 0x40, RegistryValueKind.DWord);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Delete} {ToolCommand.Comment} {languageSetting}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_07_RefreshFolder");
-            regCmd.SetValue("", language.RefreshFolder);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -ra");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._07_RefreshFolder);
+            regCmd.SetValue(string.Empty, language.RefreshFolder);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Reapply}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_08_ResetFolder");
-            regCmd.SetValue("", language.ResetFolder);
-            regCmd.SetValue("CommandFlags", 0x40, RegistryValueKind.DWord);
-            regCmd.CreateSubKey("command").SetValue("", $@"{exePath} ""%1"" -rs");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._08_ResetFolder);
+            regCmd.SetValue(string.Empty, language.ResetFolder);
+            regCmd.SetValue(RegistryValue.CommandFlags, 0x40, RegistryValueKind.DWord);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{baseCommand} {ToolCommand.Reset}");
             regCmd.Close();
 
-            regCmd = regMainMenu.CreateSubKey("_09_OpenToolPath");
-            regCmd.SetValue("", language.OpenToolPath);
-            regCmd.CreateSubKey("command").SetValue("", $@"explorer {installedPath}");
+            regCmd = regMainMenu.CreateSubKey(RegistryValue._09_OpenToolPath);
+            regCmd.SetValue(string.Empty, language.OpenToolPath);
+            regCmd.CreateSubKey(RegistryValue.Command).SetValue(string.Empty, $"{RegistryValue.Explorer} {installedPath}");
             regCmd.Close();
 
-            Environment.SetEnvironmentVariable(EnvName, resourcesPath, target);
+            regMainMenu.Close();
+
+            Environment.SetEnvironmentVariable(EnvName, installedPath, target);
         }
         catch (Exception)
         {
@@ -103,13 +105,13 @@ public class RegistryManager
     {
         try
         {
-            if (this.regDirectory.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null)
+            if (this.regDirectory.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null)
             {
-                this.regDirectory.CreateSubKey("shell").DeleteSubKeyTree("CustomizeFolderTool");
+                this.regDirectory.CreateSubKey(RegistryValue.Shell).DeleteSubKeyTree(ToolName);
             }
-            if (this.regDirectory.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null)
+            if (this.regDirectory.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null)
             {
-                this.regDirectory.CreateSubKey("ContextMenus").DeleteSubKeyTree("CustomizeFolderTool");
+                this.regDirectory.CreateSubKey(RegistryValue.ContextMenus).DeleteSubKeyTree(ToolName);
             }
 
             Environment.SetEnvironmentVariable(EnvName, null, target);
@@ -130,14 +132,14 @@ public class RegistryManager
     {
         var result = 0;
 
-        var user = Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("Classes").CreateSubKey("Directory");
-        result = user.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 1 : user.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null
+        var user = Registry.CurrentUser.CreateSubKey(RegistryValue.Software).CreateSubKey(RegistryValue.Classes).CreateSubKey(RegistryValue.Directory);
+        result = user.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null
+            ? 1 : user.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null
             ? 1 : result;
 
-        var admin = Registry.ClassesRoot.CreateSubKey("Directory");
-        result = admin.OpenSubKey("shell")?.OpenSubKey("CustomizeFolderTool") != null
-            ? 2 : admin.OpenSubKey("ContextMenus")?.OpenSubKey("CustomizeFolderTool") != null
+        var admin = Registry.ClassesRoot.CreateSubKey(RegistryValue.Directory);
+        result = admin.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null
+            ? 2 : admin.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null
             ? 2 : result;
 
         return (RegisterState)result;

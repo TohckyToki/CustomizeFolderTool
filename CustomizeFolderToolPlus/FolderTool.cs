@@ -51,7 +51,6 @@ public class FolderTool
 
     public static FolderTool CreateDesktopFile(string folderPath)
     {
-        CheckAuthority(folderPath);
         var filePath = Path.Combine(folderPath, DesktopFile);
         var resourcesPath = Path.Combine(folderPath, ResourceFile);
         CheckDesktopFile(filePath);
@@ -61,29 +60,27 @@ public class FolderTool
 
     public static void DeleteDesktopFile(string folderPath)
     {
-        CheckAuthority(folderPath);
-        var deleteFlag = false;
+        var id = FolderManager.GetFlags(folderPath);
+
+        if (id > 0)
+        {
+
+        }
+
         var resourcesPath = Path.Combine(folderPath, ResourceFile);
         if (File.Exists(resourcesPath))
         {
             File.Delete(resourcesPath);
-            deleteFlag = true;
         }
         var filePath = Path.Combine(folderPath, DesktopFile);
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
-            deleteFlag |= true;
-        }
-        if (deleteFlag)
-        {
-            FolderManager.RefreshFolder(folderPath);
         }
     }
 
     public static void ApplyDesktopFile(string folderPath)
     {
-        CheckAuthority(folderPath);
         var filePath = Path.Combine(folderPath, DesktopFile);
         if (File.Exists(filePath))
         {

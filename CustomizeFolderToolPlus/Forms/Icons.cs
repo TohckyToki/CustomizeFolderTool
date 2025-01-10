@@ -3,6 +3,7 @@ using CustomizeFolderToolPlus.Properties;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using ToolLib.Languages.Tool;
+using static ToolLib.Constants;
 
 namespace CustomizeFolderToolPlus.Forms;
 
@@ -23,21 +24,30 @@ public partial class Icons : Form, IFormBase
             this.Text = this.Language.IconTitle;
         }
 
-        this.AddButton(Resources.IconDefault, this.Language!.IconDefault, 10, 10).Click += this.Default_Click;
-        this.AddButton(Resources.Icon01, this.Language.Icon01, 84, 10).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon02, this.Language.Icon02, 158, 10).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon03, this.Language.Icon03, 232, 10).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon04, this.Language.Icon04, 306, 10).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon05, this.Language.Icon05, 10, 84).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon06, this.Language.Icon06, 84, 84).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon07, this.Language.Icon07, 158, 84).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon08, this.Language.Icon08, 232, 84).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon09, this.Language.Icon09, 306, 84).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon10, this.Language.Icon10, 10, 158).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon11, this.Language.Icon11, 84, 158).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon12, this.Language.Icon12, 158, 158).Click += this.Colors_Click;
-        this.AddButton(Resources.Icon13, this.Language.Icon13, 232, 158).Click += this.Colors_Click;
-        this.AddButton(Resources.IconAdd, this.Language.IconAdd, 306, 158).Click += this.Customize_Click;
+        var buttons = new List<(Icon Icon, string Text, EventHandler Click)>
+        {
+            (Resources.IconDefault, this.Language!.IconDefault, this.Default_Click),
+            (Resources.Icon01, this.Language.Icon01, this.Colors_Click),
+            (Resources.Icon02, this.Language.Icon02, this.Colors_Click),
+            (Resources.Icon03, this.Language.Icon03, this.Colors_Click),
+            (Resources.Icon04, this.Language.Icon04, this.Colors_Click),
+            (Resources.Icon05, this.Language.Icon05, this.Colors_Click),
+            (Resources.Icon06, this.Language.Icon06, this.Colors_Click),
+            (Resources.Icon07, this.Language.Icon07, this.Colors_Click),
+            (Resources.Icon08, this.Language.Icon08, this.Colors_Click),
+            (Resources.Icon09, this.Language.Icon09, this.Colors_Click),
+            (Resources.Icon10, this.Language.Icon10, this.Colors_Click),
+            (Resources.Icon11, this.Language.Icon11, this.Colors_Click),
+            (Resources.Icon12, this.Language.Icon12, this.Colors_Click),
+            (Resources.Icon13, this.Language.Icon13, this.Colors_Click),
+            (Resources.IconAdd, this.Language.IconAdd, this.Customize_Click),
+        };
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            var button = buttons[i];
+            this.AddButton(button.Icon, button.Text, i).Click += button.Click;
+        }
 
         //Modify icon of last button.
         var newicon = new Icon(Resources.IconAdd, new Size(256, 256));
@@ -45,8 +55,17 @@ public partial class Icons : Form, IFormBase
         ((Button)this.panel1.Controls[this.panel1.Controls.Count - 1]).BackgroundImage = bitmap;
     }
 
-    private Button AddButton(Icon icon, string tooltip, int left, int top)
+    private Button AddButton(Icon icon, string tooltip, int index)
     {
+        const int baseX = 10;
+        const int baseY = 10;
+        const int offsetX = 74;
+        const int offsetY = 74;
+        const int columns = 5;
+
+        var left = baseX + (index % columns * offsetX);
+        var top = baseY + ((int)Math.Floor(index / columns * 1d) * offsetY);
+
         var panel = this.panel1;
 
         var button = new Button
@@ -98,8 +117,8 @@ public partial class Icons : Form, IFormBase
         var ofd = new OpenFileDialog
         {
             Title = this.Language!.IconAddTitle,
-            Filter = $"{this.Language.IconAddIcoFilter}|*.ico|{this.Language.IconAddPngFilter}|*.png",
-            DefaultExt = "*.ico",
+            Filter = $"{this.Language.IconAddIcoFilter}|{Wildcard.Ico}|{this.Language.IconAddPngFilter}|{Wildcard.Png}",
+            DefaultExt = Wildcard.Ico,
             CheckFileExists = true,
             CheckPathExists = true,
             Multiselect = false,
@@ -112,8 +131,8 @@ public partial class Icons : Form, IFormBase
             {
                 var icon = Path.GetExtension(ofd.FileName) switch
                 {
-                    ".ico" => new Icon(ofd.FileName!),
-                    ".png" => Icon.FromHandle(((Bitmap)Image.FromFile(ofd.FileName!)).GetHicon()),
+                    Extensions.Ico => new Icon(ofd.FileName!),
+                    Extensions.Png => Icon.FromHandle(((Bitmap)Image.FromFile(ofd.FileName!)).GetHicon()),
                     _ => null,
                 };
                 if (icon != null)
@@ -130,8 +149,8 @@ public partial class Icons : Form, IFormBase
         {
             var icon = Path.GetExtension(ofd.FileName) switch
             {
-                ".ico" => new Icon(ofd.FileName!),
-                ".png" => this.IconFromImage(Image.FromFile(ofd.FileName!)),
+                Extensions.Ico => new Icon(ofd.FileName!),
+                Extensions.Png => this.IconFromImage(Image.FromFile(ofd.FileName!)),
                 _ => null,
             };
             if (icon != null)
@@ -163,7 +182,7 @@ public partial class Icons : Form, IFormBase
         string iconPath;
         do
         {
-            iconPath = Path.Combine(this.FolderPath!, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".ico");
+            iconPath = Path.Combine(this.FolderPath!, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Extensions.Ico);
         } while (File.Exists(iconPath));
         return iconPath;
     }

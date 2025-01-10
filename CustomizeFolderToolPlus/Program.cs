@@ -1,6 +1,7 @@
 using CustomizeFolderToolPlus.Forms;
 using CustomizeFolderToolPlus.Interfaces;
 using ToolLib.Languages.Tool;
+using static ToolLib.Constants;
 
 namespace CustomizeFolderToolPlus;
 
@@ -8,13 +9,13 @@ internal static class Program
 {
     private static string[][] behaviors =
     [
-        ["-a", "-d",],
-        [ "-rs", "-ra", ]
+        [ToolCommand.Add, ToolCommand.Delete,],
+        [ ToolCommand.Reset, ToolCommand.Reapply, ]
     ];
 
     private static string[] targets =
     [
-        "alias", "icon", "comment",
+        ToolCommand.Alias, ToolCommand.Icon, ToolCommand.Comment,
     ];
 
     private static ILanguage[] languages =
@@ -33,7 +34,7 @@ internal static class Program
             && Directory.Exists(args[0])
             && behaviors[0].Contains(args[1].ToLower())
             && targets.Contains(args[2].ToLower())
-            && args[3].ToLower() == "-lang")
+            && args[3].ToLower() == ToolCommand.Language)
         {
             var folder = args[0];
             var behavior = args[1].ToLower();
@@ -42,14 +43,14 @@ internal static class Program
             var language = languages[0];
             language = languages.FirstOrDefault(x => x.CodePage.ToLower() == lang) ?? language;
 
-            if (behavior == "-a")
+            if (behavior == ToolCommand.Add)
             {
                 ApplicationConfiguration.Initialize();
                 IFormBase? form = target switch
                 {
-                    "alias" => new Alias(),
-                    "icon" => new Icons(),
-                    "comment" => new Comment(),
+                    ToolCommand.Alias => new Alias(),
+                    ToolCommand.Icon => new Icons(),
+                    ToolCommand.Comment => new Comment(),
                     _ => default,
                 };
                 if (form != null)
@@ -60,13 +61,13 @@ internal static class Program
                     Application.Run((Form)form);
                 }
             }
-            else if (behavior == "-d")
+            else if (behavior == ToolCommand.Delete)
             {
                 var desktop = target switch
                 {
-                    "alias" => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
-                    "icon" => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
-                    "comment" => FolderTool.CreateDesktopFile(folder).DeleteComment(),
+                    ToolCommand.Alias => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
+                    ToolCommand.Icon => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
+                    ToolCommand.Comment => FolderTool.CreateDesktopFile(folder).DeleteComment(),
                     _ => default,
                 };
                 desktop?.Save();
@@ -79,11 +80,11 @@ internal static class Program
         {
             var folder = args[0];
             var behavior = args[1].ToLower();
-            if (behavior == "-rs")
+            if (behavior == ToolCommand.Reset)
             {
                 FolderTool.DeleteDesktopFile(folder);
             }
-            else if (behavior == "-ra")
+            else if (behavior == ToolCommand.Reapply)
             {
                 FolderTool.ApplyDesktopFile(folder);
             }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
+using static ToolLib.Constants;
 
 namespace ToolLib;
 
@@ -281,18 +282,18 @@ public static class ResourcesManager
 
     #region External
 
-    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+    [DllImport(Kernel32, SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern nint BeginUpdateResource(string fileName,
         [MarshalAs(UnmanagedType.Bool)] bool deleteExistingResources);
 
-    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+    [DllImport(Kernel32, SetLastError = true, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool UpdateResource(nint hUpdate, nint lpType, nint lpName, ushort wLanguage,
         [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 5)]
         byte[] lpData,
         uint cbData);
 
-    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+    [DllImport(Kernel32, SetLastError = true, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool EndUpdateResource(nint hUpdate, [MarshalAs(UnmanagedType.Bool)] bool discard);
 
