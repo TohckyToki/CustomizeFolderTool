@@ -1,7 +1,7 @@
 using ToolLib;
 using ToolLib.Languages.Register;
 
-namespace ToolRegister;
+namespace CustomizeFolderToolPlus.Forms;
 
 public partial class Register : Form
 {
@@ -32,20 +32,16 @@ public partial class Register : Form
         }
     }
 
-    private void checkBox1_CheckedChanged(object sender, EventArgs e)
-    {
-    }
-
     private void button1_Click(object sender, EventArgs e)
     {
-        var register = checkBox1.Checked ? new RegistryManager(true) : new RegistryManager(false);
+        var register = new RegistryManager();
         register.Add(Language);
         CheckRegisterState();
     }
 
     private void button2_Click(object sender, EventArgs e)
     {
-        var register = checkBox1.Checked ? new RegistryManager(true) : new RegistryManager(false);
+        var register = new RegistryManager();
         register.Delete();
         CheckRegisterState();
     }
@@ -55,14 +51,11 @@ public partial class Register : Form
         switch (RegistryManager.CheckRegisterState())
         {
             case RegistryManager.RegisterState.User:
-            case RegistryManager.RegisterState.Admin:
-                checkBox1.Enabled = false;
                 button1.Enabled = false;
                 button2.Enabled = true;
                 break;
             case RegistryManager.RegisterState.None:
             default:
-                checkBox1.Enabled = true;
                 button1.Enabled = true;
                 button2.Enabled = false;
                 break;
@@ -74,6 +67,5 @@ public partial class Register : Form
         label1.Text = Language.LanguageTitle;
         button1.Text = Language.Register;
         button2.Text = Language.Unregister;
-        checkBox1.Text = Language.Admin;
     }
 }

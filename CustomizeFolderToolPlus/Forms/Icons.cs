@@ -9,8 +9,8 @@ namespace CustomizeFolderToolPlus.Forms;
 
 public partial class Icons : Form, IFormBase
 {
-    public string? FolderPath { get; set; }
-    public ILanguage? Language { get; set; }
+    public string FolderPath { get; set; } = null!;
+    public ILanguage Language { get; set; } = null!;
 
     public Icons()
     {
@@ -19,14 +19,11 @@ public partial class Icons : Form, IFormBase
 
     private void Icons_Load(object sender, EventArgs e)
     {
-        if (this.Language != null)
-        {
-            this.Text = this.Language.IconTitle;
-        }
+        this.Text = this.Language.IconTitle;
 
         var buttons = new List<(Icon Icon, string Text, EventHandler Click)>
         {
-            (Resources.IconDefault, this.Language!.IconDefault, this.Default_Click),
+            (Resources.IconDefault, this.Language.IconDefault, this.Default_Click),
             (Resources.Icon01, this.Language.Icon01, this.Colors_Click),
             (Resources.Icon02, this.Language.Icon02, this.Colors_Click),
             (Resources.Icon03, this.Language.Icon03, this.Colors_Click),
@@ -85,7 +82,7 @@ public partial class Icons : Form, IFormBase
 
     private void Default_Click(object? sender, EventArgs e)
     {
-        FolderTool.CreateDesktopFile(this.FolderPath!).DeleteIcon().Save();
+        FolderTool.Create(this.FolderPath).DeleteIcon();
         this.Close();
     }
 
@@ -101,13 +98,13 @@ public partial class Icons : Form, IFormBase
         //{
         //    Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
         //}.Refresh();
-        //FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
+        //FolderTool.CreateDesktopFile(this.FolderPath).CreateIcon(iconPath).Save();
 
         var ms = new MemoryStream();
         new Icon(icon, new Size(256, 256)).Save(ms);
         var data = ms.ToArray();
         ms.Close();
-        FolderTool.CreateDesktopFile(this.FolderPath!).CreateIconWithResource(data).Save();
+        FolderTool.Create(this.FolderPath).CreateIcon(data);
 
         this.Close();
     }
@@ -116,7 +113,7 @@ public partial class Icons : Form, IFormBase
     {
         var ofd = new OpenFileDialog
         {
-            Title = this.Language!.IconAddTitle,
+            Title = this.Language.IconAddTitle,
             Filter = $"{this.Language.IconAddIcoFilter}|{Wildcard.Ico}|{this.Language.IconAddPngFilter}|{Wildcard.Png}",
             DefaultExt = Wildcard.Ico,
             CheckFileExists = true,
@@ -163,28 +160,18 @@ public partial class Icons : Form, IFormBase
                 //{
                 //    Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
                 //}.Refresh();
-                //FolderTool.CreateDesktopFile(this.FolderPath!).CreateIcon(iconPath).Save();
+                //FolderTool.CreateDesktopFile(this.FolderPath).CreateIcon(iconPath).Save();
 
                 var ms = new MemoryStream();
                 icon.Save(ms);
                 var data = ms.ToArray();
                 ms.Close();
-                FolderTool.CreateDesktopFile(this.FolderPath!).CreateIconWithResource(data).Save();
+                FolderTool.Create(this.FolderPath).CreateIcon(data);
 
                 this.Close();
             }
         }
 
-    }
-
-    private string GenerateNewIconFileName()
-    {
-        string iconPath;
-        do
-        {
-            iconPath = Path.Combine(this.FolderPath!, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Extensions.Ico);
-        } while (File.Exists(iconPath));
-        return iconPath;
     }
 
     private Bitmap ResizeImage(Image image, int width, int height)

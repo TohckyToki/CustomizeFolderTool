@@ -10,8 +10,6 @@ public class Chinese : ILanguage
 
     public string Unregister => "解除";
 
-    public string Admin => "管理员权限";
-
     public string AddAlias => "添加别名";
 
     public string DeleteAlias => "移除别名";

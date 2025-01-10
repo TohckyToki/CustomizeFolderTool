@@ -6,11 +6,19 @@ public abstract class Constants
     public const string ToolIconFileName = "CustomizeFolderTool.ico";
     public const string ToolExeFileName = "CustomizeFolderToolPlus.exe";
     public const string ToolResourceFileName = "ToolResources.dll";
+    public const string ToolResourceFolder = "Resources";
+
+    public const string ToolResourceTemplateFileName = "ToolResources.{0}.dll";
+
+    public const string ToolConfigFileName = "";
 
     public const string EnvName = "CFT_BASE";
+    public const string BaseFolder = $"%{EnvName}%";
 
     public const string Shell32 = "Shell32.dll";
     public const string Kernel32 = "kernel32";
+
+    public const string DesktopFile = "desktop.ini";
 
     public abstract class ToolCommand
     {

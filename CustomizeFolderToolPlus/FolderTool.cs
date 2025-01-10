@@ -1,196 +1,128 @@
-﻿using IniParser;
-using IniParser.Model;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Reflection;
+using System.Text.RegularExpressions;
 using ToolLib;
+using static ToolLib.Constants;
 
 namespace CustomizeFolderToolPlus;
 
 public class FolderTool
 {
-    private const string DesktopFile = "desktop.ini";
-    private const string ResourceFile = "desktop.ini.res.dll";
+    private const int AliasIndex = 101;
+    private const int IconIndex = 1;
 
-    private const string ShellClassInfo = ".ShellClassInfo";
-    private const string LocalizedResourceName = "LocalizedResourceName";
-    private const string IconResource = "IconResource";
-    private const string InfoTip = "InfoTip";
+    private string FolderPath { get; }
+    private string ToolFolder { get; }
+    private string ResourceFolder { get; }
 
-    private readonly string _filePath;
-    private readonly string _resourcesPath;
-    private readonly IniData data;
+    private string? ResourceFileFullName { get; set; }
+    private string? ResourceFileRelativeName { get; set; }
 
-    private static void CheckAuthority(string folderPath)
+    public static FolderTool Create(string folderPath)
     {
-        //Todo: Check if user has permission to modify this folder.
-        DirectoryInfo folderInfo = new DirectoryInfo(folderPath);
+        var tool = new FolderTool(folderPath);
+        tool.GenerateResourceFile();
+        return tool;
     }
 
-    private static void CheckDesktopFile(string filePath)
+    public static void Reset(string folderPath)
     {
-        if (!File.Exists(filePath))
+        var tool = new FolderTool(folderPath);
+        tool.Reset();
+    }
+
+    public static void Reapply(string folderPath)
+    {
+        var tool = new FolderTool(folderPath);
+        tool.Reapply();
+    }
+
+    private FolderTool(string folderPath)
+    {
+        this.FolderPath = folderPath;
+        this.ToolFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        this.ResourceFolder = Path.Combine(this.ToolFolder, ToolResourceFolder);
+    }
+
+    private uint GetLastId()
+    {
+        var maxIndex = Directory.GetFiles(this.ResourceFolder)
+            .Where(x => Regex.IsMatch(x, string.Format(ToolResourceTemplateFileName.Replace(".", @"\."), @"\d+")))
+            .Select(x => x.Replace(".dll", "").Split(".", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Last())
+            .Max();
+        return string.IsNullOrWhiteSpace(maxIndex) ? 1U : uint.Parse(maxIndex);
+    }
+
+    private void GenerateResourceFile()
+    {
+        var id = FolderManager.GetFlags(this.FolderPath);
+        if (id <= 0)
         {
-            File.Create(filePath).Close();
+            id = this.GetLastId();
+        }
+        var resourceFileFullName = Path.Combine(this.ResourceFolder, string.Format(ToolResourceTemplateFileName, id));
+        if (!File.Exists(resourceFileFullName))
+        {
+            File.Copy(Path.Combine(this.ToolFolder, ToolResourceFileName), resourceFileFullName);
+        }
+        this.ResourceFileFullName = resourceFileFullName;
+        this.ResourceFileRelativeName = Path.Combine(BaseFolder, ToolResourceFolder, Path.GetFileName(resourceFileFullName));
+    }
+
+    public void CreateAlias(string alias)
+    {
+        if (this.ResourceFileFullName != null && this.ResourceFileRelativeName != null)
+        {
+            ResourcesManager.CreateStringResources(this.ResourceFileFullName, AliasIndex, alias);
+            FolderManager.SetLocalizedName(this.FolderPath, this.ResourceFileRelativeName, AliasIndex);
         }
     }
 
-    private static void CheckResourceFile(string filePath)
+    public void DeleteAlias()
     {
-        var resourceFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Resources\\ToolResources.dll");
-        if (!File.Exists(filePath))
-        {
-            File.Copy(resourceFile, filePath);
+        FolderManager.RemoveLocalizedName(this.FolderPath);
+    }
 
-            new FileInfo(filePath)
-            {
-                Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
-            }.Refresh();
+    public void CreateIcon(byte[] iconData)
+    {
+        if (this.ResourceFileFullName != null && this.ResourceFileRelativeName != null)
+        {
+            ResourcesManager.CreateIconResources(this.ResourceFileFullName, IconIndex, iconData);
+            FolderManager.SetIcon(this.FolderPath, this.ResourceFileRelativeName, -1);
         }
     }
 
-    public static FolderTool CreateDesktopFile(string folderPath)
+    public void DeleteIcon()
     {
-        var filePath = Path.Combine(folderPath, DesktopFile);
-        var resourcesPath = Path.Combine(folderPath, ResourceFile);
-        CheckDesktopFile(filePath);
-        CheckResourceFile(resourcesPath);
-        return new FolderTool(filePath, resourcesPath);
+        FolderManager.RemoveIcon(this.FolderPath);
     }
 
-    public static void DeleteDesktopFile(string folderPath)
+    public void CreateComment(string tipinfo)
     {
-        var id = FolderManager.GetFlags(folderPath);
-
-        if (id > 0)
-        {
-
-        }
-
-        var resourcesPath = Path.Combine(folderPath, ResourceFile);
-        if (File.Exists(resourcesPath))
-        {
-            File.Delete(resourcesPath);
-        }
-        var filePath = Path.Combine(folderPath, DesktopFile);
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
+        FolderManager.SetInfoTip(this.FolderPath, tipinfo);
     }
 
-    public static void ApplyDesktopFile(string folderPath)
+    public void DeleteComment()
     {
-        var filePath = Path.Combine(folderPath, DesktopFile);
-        if (File.Exists(filePath))
+        FolderManager.RemoveInfoTip(this.FolderPath);
+    }
+
+    private void Reset()
+    {
+        var id = FolderManager.GetFlags(this.FolderPath);
+        var resourceFileFullName = Path.Combine(this.ResourceFolder, string.Format(ToolResourceTemplateFileName, id));
+        if (File.Exists(resourceFileFullName))
         {
-            FolderManager.RefreshFolder(folderPath);
+            File.Delete(resourceFileFullName);
+        }
+        var desktopFile = Path.Combine(this.FolderPath, DesktopFile);
+        if (File.Exists(desktopFile))
+        {
+            File.Delete(desktopFile);
         }
     }
 
-    private FolderTool(string filePath, string resourcesPath)
+    private void Reapply()
     {
-        this._filePath = filePath;
-        this._resourcesPath = resourcesPath;
-        var parser = new FileIniDataParser();
-        this.data = parser.ReadFile(filePath);
-    }
-
-    private KeyDataCollection CreateSectionData(string sectionName)
-    {
-        this.data.Sections.AddSection(sectionName);
-        return this.data.Sections[sectionName];
-    }
-
-    public FolderTool CreateAliasWithResource(string alias)
-    {
-        ResourcesManager.CreateStringResources(this._resourcesPath, 101, alias);
-
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(LocalizedResourceName);
-        section.AddKey(LocalizedResourceName, $"@{this._resourcesPath},-101");
-        return this;
-    }
-
-    public FolderTool CreateAlias(string alias)
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(LocalizedResourceName);
-        section.AddKey(LocalizedResourceName, alias);
-        return this;
-    }
-
-    public FolderTool DeleteAlias()
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(LocalizedResourceName);
-        return this;
-    }
-
-    public FolderTool CreateIcon(string iconPath)
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        this.DeleteIconFile(section);
-        section.AddKey(IconResource, Path.GetFileName(iconPath) + ",0");
-        return this;
-    }
-
-    public FolderTool CreateIconWithResource(byte[] iconData)
-    {
-        ResourcesManager.CreateIconResources(this._resourcesPath, 1, iconData);
-
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(IconResource);
-        section.AddKey(IconResource, $"@{this._resourcesPath},-1");
-        return this;
-    }
-
-    public FolderTool DeleteIcon()
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        this.DeleteIconFile(section);
-        return this;
-    }
-
-    private void DeleteIconFile(KeyDataCollection section)
-    {
-        if (section.ContainsKey(IconResource))
-        {
-            var oldIcon = section[IconResource];
-            var imgPath = oldIcon.Split(',')[0];
-            if (Path.GetExtension(imgPath) == ".ico")
-            {
-                var folderPath = Path.GetDirectoryName(this._filePath)!;
-                File.Delete(Path.Combine(folderPath, imgPath));
-            }
-            section.RemoveKey(IconResource);
-        }
-    }
-
-    public FolderTool CreateComment(string tipinfo)
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(InfoTip);
-        section.AddKey(InfoTip, tipinfo);
-        return this;
-    }
-
-    public FolderTool DeleteComment()
-    {
-        var section = this.CreateSectionData(ShellClassInfo);
-        section.RemoveKey(InfoTip);
-        return this;
-    }
-
-    /// <summary>
-    /// Save data to ini file
-    /// </summary>
-    public void Save()
-    {
-        var fileInfo = new FileInfo(this._filePath);
-        fileInfo.Attributes = FileAttributes.Normal;
-        File.WriteAllText(this._filePath, this.data.ToString(), Encoding.Unicode);
-        var folder = Path.GetDirectoryName(this._filePath)!;
-        FolderManager.RefreshFolder(folder);
+        FolderManager.RefreshFolder(this.FolderPath);
     }
 }

@@ -5,7 +5,6 @@ public interface ILanguage : ILanguageBase
     public string LanguageTitle { get; }
     public string Register { get; }
     public string Unregister { get; }
-    public string Admin { get; }
 
     public string AddAlias { get; }
     public string DeleteAlias { get; }

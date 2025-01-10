@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿#nullable disable
+
+using System.Runtime.InteropServices;
 using static ToolLib.Constants;
 
 namespace ToolLib;
@@ -67,9 +69,9 @@ public static class FolderManager
         _ = SHSetLocalizedName(folderPath, resFile, stringIndex);
     }
 
-    public static void RemoveLocalizedName(string folderPath, string resFile, int stringIndex)
+    public static void RemoveLocalizedName(string folderPath)
     {
-        _ = SHSetLocalizedName(folderPath, null, stringIndex);
+        _ = SHSetLocalizedName(folderPath, null, 0);
     }
 
     #region External

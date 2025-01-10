@@ -10,8 +10,6 @@ public class English : ILanguage
 
     public string Unregister => "Unregister";
 
-    public string Admin => "As Admin";
-
     public string AddAlias => "Add Alias";
 
     public string DeleteAlias => "Delete Alias";

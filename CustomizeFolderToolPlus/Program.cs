@@ -46,31 +46,35 @@ internal static class Program
             if (behavior == ToolCommand.Add)
             {
                 ApplicationConfiguration.Initialize();
-                IFormBase? form = target switch
+                IFormBase form = target switch
                 {
                     ToolCommand.Alias => new Alias(),
                     ToolCommand.Icon => new Icons(),
                     ToolCommand.Comment => new Comment(),
-                    _ => default,
+                    _ => default!,
                 };
-                if (form != null)
-                {
-                    form.FolderPath = folder;
-                    form.Language = language;
+                form.FolderPath = folder;
+                form.Language = language;
 
-                    Application.Run((Form)form);
-                }
+                Application.Run((Form)form);
             }
             else if (behavior == ToolCommand.Delete)
             {
-                var desktop = target switch
+                var tool = FolderTool.Create(folder);
+                switch (target)
                 {
-                    ToolCommand.Alias => FolderTool.CreateDesktopFile(folder).DeleteAlias(),
-                    ToolCommand.Icon => FolderTool.CreateDesktopFile(folder).DeleteIcon(),
-                    ToolCommand.Comment => FolderTool.CreateDesktopFile(folder).DeleteComment(),
-                    _ => default,
-                };
-                desktop?.Save();
+                    case ToolCommand.Alias:
+                        tool.DeleteAlias();
+                        break;
+                    case ToolCommand.Icon:
+                        tool.DeleteIcon();
+                        break;
+                    case ToolCommand.Comment:
+                        tool.DeleteComment();
+                        break;
+                    default:
+                        break;
+                }
                 Application.Exit();
             }
         }
@@ -82,17 +86,18 @@ internal static class Program
             var behavior = args[1].ToLower();
             if (behavior == ToolCommand.Reset)
             {
-                FolderTool.DeleteDesktopFile(folder);
+                FolderTool.Reset(folder);
             }
             else if (behavior == ToolCommand.Reapply)
             {
-                FolderTool.ApplyDesktopFile(folder);
+                FolderTool.Reapply(folder);
             }
             Application.Exit();
         }
         else
         {
-            Application.Exit();
+            ApplicationConfiguration.Initialize();
+            Application.Run(new Register());
         }
     }
 }

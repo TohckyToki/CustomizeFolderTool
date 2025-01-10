@@ -5,7 +5,7 @@ namespace Test
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var file = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "ToolResources.dll");
             var icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Icon02.ico");

@@ -4,6 +4,6 @@ namespace CustomizeFolderToolPlus.Interfaces;
 
 internal interface IFormBase
 {
-    public string? FolderPath { get; set; }
-    public ILanguage? Language { get; set; }
+    public string FolderPath { get; set; }
+    public ILanguage Language { get; set; }
 }

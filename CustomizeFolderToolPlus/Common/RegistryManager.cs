@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿#nullable disable
+
+using Microsoft.Win32;
 using ToolLib.Languages.Register;
 using static ToolLib.Constants;
 
@@ -6,16 +8,13 @@ namespace ToolLib;
 
 public class RegistryManager
 {
-    private RegistryKey regDirectory { get; }
-    private EnvironmentVariableTarget target { get; }
+    private RegistryKey RegDirectory { get; }
+    private EnvironmentVariableTarget Target { get; }
 
-    public RegistryManager(bool isAdmin)
+    public RegistryManager()
     {
-        this.regDirectory = isAdmin
-            ? Registry.ClassesRoot.CreateSubKey(RegistryValue.Directory)
-            : Registry.CurrentUser.CreateSubKey(RegistryValue.Software).CreateSubKey(RegistryValue.Classes).CreateSubKey(RegistryValue.Directory);
-
-        this.target = isAdmin ? EnvironmentVariableTarget.Machine : EnvironmentVariableTarget.User;
+        this.RegDirectory = Registry.CurrentUser.CreateSubKey(RegistryValue.Software).CreateSubKey(RegistryValue.Classes).CreateSubKey(RegistryValue.Directory);
+        this.Target = EnvironmentVariableTarget.User;
     }
 
     public void Add(ILanguage language)
@@ -29,13 +28,13 @@ public class RegistryManager
         var regCmd = default(RegistryKey);
         try
         {
-            regMainMenu = this.regDirectory.CreateSubKey(RegistryValue.Shell).CreateSubKey(ToolName);
+            regMainMenu = this.RegDirectory.CreateSubKey(RegistryValue.Shell).CreateSubKey(ToolName);
             regMainMenu.SetValue(string.Empty, ToolName);
             regMainMenu.SetValue(RegistryValue.Icon, Path.Combine(installedPath, ToolIconFileName), RegistryValueKind.String);
             regMainMenu.SetValue(RegistryValue.ExtendedSubCommandsKey, @$"{RegistryValue.Directory}\{RegistryValue.ContextMenus}\{ToolName}", RegistryValueKind.String);
             regMainMenu.Close();
 
-            regMainMenu = this.regDirectory.CreateSubKey(RegistryValue.ContextMenus).CreateSubKey(ToolName).CreateSubKey(RegistryValue.Shell);
+            regMainMenu = this.RegDirectory.CreateSubKey(RegistryValue.ContextMenus).CreateSubKey(ToolName).CreateSubKey(RegistryValue.Shell);
 
             regCmd = regMainMenu.CreateSubKey(RegistryValue._01_AddAlias);
             regCmd.SetValue(string.Empty, language.AddAlias);
@@ -88,7 +87,7 @@ public class RegistryManager
 
             regMainMenu.Close();
 
-            Environment.SetEnvironmentVariable(EnvName, installedPath, target);
+            Environment.SetEnvironmentVariable(EnvName, installedPath, Target);
         }
         catch (Exception)
         {
@@ -97,7 +96,7 @@ public class RegistryManager
         {
             regCmd?.Close();
             regMainMenu?.Close();
-            this.regDirectory.Close();
+            this.RegDirectory.Close();
         }
     }
 
@@ -105,16 +104,16 @@ public class RegistryManager
     {
         try
         {
-            if (this.regDirectory.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null)
+            if (this.RegDirectory.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null)
             {
-                this.regDirectory.CreateSubKey(RegistryValue.Shell).DeleteSubKeyTree(ToolName);
+                this.RegDirectory.CreateSubKey(RegistryValue.Shell).DeleteSubKeyTree(ToolName);
             }
-            if (this.regDirectory.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null)
+            if (this.RegDirectory.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null)
             {
-                this.regDirectory.CreateSubKey(RegistryValue.ContextMenus).DeleteSubKeyTree(ToolName);
+                this.RegDirectory.CreateSubKey(RegistryValue.ContextMenus).DeleteSubKeyTree(ToolName);
             }
 
-            Environment.SetEnvironmentVariable(EnvName, null, target);
+            Environment.SetEnvironmentVariable(EnvName, null, Target);
         }
         catch (Exception)
         {
@@ -123,7 +122,7 @@ public class RegistryManager
         {
             if (needClose)
             {
-                this.regDirectory.Close();
+                this.RegDirectory.Close();
             }
         }
     }
@@ -137,11 +136,6 @@ public class RegistryManager
             ? 1 : user.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null
             ? 1 : result;
 
-        var admin = Registry.ClassesRoot.CreateSubKey(RegistryValue.Directory);
-        result = admin.OpenSubKey(RegistryValue.Shell)?.OpenSubKey(ToolName) != null
-            ? 2 : admin.OpenSubKey(RegistryValue.ContextMenus)?.OpenSubKey(ToolName) != null
-            ? 2 : result;
-
         return (RegisterState)result;
     }
 
@@ -149,6 +143,5 @@ public class RegistryManager
     {
         None,
         User,
-        Admin
     }
 }

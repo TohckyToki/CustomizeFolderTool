@@ -5,8 +5,8 @@ namespace CustomizeFolderToolPlus.Forms;
 
 public partial class Comment : Form, IFormBase
 {
-    public string? FolderPath { get; set; }
-    public ILanguage? Language { get; set; }
+    public string FolderPath { get; set; } = null!;
+    public ILanguage Language { get; set; } = null!;
 
     public Comment()
     {
@@ -15,13 +15,10 @@ public partial class Comment : Form, IFormBase
 
     private void Comment_Load(object sender, EventArgs e)
     {
-        if (Language != null)
-        {
-            this.Text = Language.CommentTitle;
-            this.label1.Text = Language.CommentMessage;
-            this.button1.Text = Language.ConfirmText;
-            this.button2.Text = Language.CancelText;
-        }
+        this.Text = Language.CommentTitle;
+        this.label1.Text = Language.CommentMessage;
+        this.button1.Text = Language.ConfirmText;
+        this.button2.Text = Language.CancelText;
         textBox1.Focus();
     }
 
@@ -45,12 +42,12 @@ public partial class Comment : Form, IFormBase
 
     private void SaveComment(string remarks)
     {
-        if (string.IsNullOrEmpty(remarks))
+        if (string.IsNullOrWhiteSpace(remarks))
         {
             textBox1.Focus();
             return;
         }
-        FolderTool.CreateDesktopFile(this.FolderPath!).CreateComment(remarks).Save();
+        FolderTool.Create(this.FolderPath).CreateComment(remarks);
         this.Close();
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿#nullable disable
+
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using static ToolLib.Constants;
@@ -180,26 +182,8 @@ public static class ResourcesManager
         }
     }
 
-    private static void UnlockFile(string resourceFile)
-    {
-        new FileInfo(resourceFile)
-        {
-            Attributes = FileAttributes.Normal
-        }.Refresh();
-    }
-
-    private static void LockFile(string resourceFile)
-    {
-        new FileInfo(resourceFile)
-        {
-            Attributes = FileAttributes.Archive | FileAttributes.Hidden | FileAttributes.System
-        }.Refresh();
-    }
-
     public static void CreateStringResources(string resourceFile, int id, string value)
     {
-        UnlockFile(resourceFile);
-
         var handlePtr = BeginUpdateResource(resourceFile, false);
 
         if (handlePtr == nint.Zero)
@@ -213,14 +197,10 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handlePtr, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
-
-        LockFile(resourceFile);
     }
 
     public static void DeleteTextResources(string resourceFile, int id)
     {
-        UnlockFile(resourceFile);
-
         var handlePtr = BeginUpdateResource(resourceFile, false);
 
         if (handlePtr == nint.Zero)
@@ -231,14 +211,10 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handlePtr, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
-
-        LockFile(resourceFile);
     }
 
     public static void CreateIconResources(string resourceFile, int id, byte[] value)
     {
-        UnlockFile(resourceFile);
-
         var handleExe = BeginUpdateResource(resourceFile, false);
 
         if (handleExe == nint.Zero)
@@ -258,14 +234,10 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handleExe, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
-
-        LockFile(resourceFile);
     }
 
     public static void DeleteIconResources(string resourceFile, int id)
     {
-        UnlockFile(resourceFile);
-
         var handleExe = BeginUpdateResource(resourceFile, false);
 
         if (handleExe == nint.Zero)
@@ -276,8 +248,6 @@ public static class ResourcesManager
 
         if (!EndUpdateResource(handleExe, false))
             throw new Win32Exception(Marshal.GetLastWin32Error());
-
-        LockFile(resourceFile);
     }
 
     #region External
