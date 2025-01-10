@@ -1,5 +1,5 @@
-using ToolLib;
-using ToolLib.Languages.Register;
+using CustomizeFolderToolPlus.Common;
+using CustomizeFolderToolPlus.Common.Languages.Register;
 
 namespace CustomizeFolderToolPlus.Forms;
 

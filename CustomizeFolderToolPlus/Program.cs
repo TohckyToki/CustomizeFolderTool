@@ -1,7 +1,7 @@
+using CustomizeFolderToolPlus.Common.Languages.Tool;
 using CustomizeFolderToolPlus.Forms;
 using CustomizeFolderToolPlus.Interfaces;
-using ToolLib.Languages.Tool;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus;
 

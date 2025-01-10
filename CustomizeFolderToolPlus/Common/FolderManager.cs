@@ -1,9 +1,9 @@
 ﻿#nullable disable
 
 using System.Runtime.InteropServices;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
-namespace ToolLib;
+namespace CustomizeFolderToolPlus.Common;
 
 public static class FolderManager
 {
@@ -26,10 +26,19 @@ public static class FolderManager
         };
         _ = SHGetSetFolderCustomSettings(ref FolderSettings, folderPath, (uint)FCS.FCS_FORCEWRITE);
     }
+    public static void ResetFlags(string folderPath)
+    {
+        var FolderSettings = new LPSHFOLDERCUSTOMSETTINGS
+        {
+            dwMask = (uint)FCSM.FCSM_FLAGS,
+        };
+        _ = SHGetSetFolderCustomSettings(ref FolderSettings, folderPath, (uint)FCS.FCS_FORCEWRITE);
+    }
 
     public static void RefreshFolder(string folderPath)
     {
         var flag = GetFlags(folderPath);
+        ResetFlags(folderPath);
         SetFlags(folderPath, flag);
     }
 
@@ -71,7 +80,7 @@ public static class FolderManager
 
     public static void RemoveLocalizedName(string folderPath)
     {
-        _ = SHSetLocalizedName(folderPath, null, 0);
+        _ = SHRemoveLocalizedName(folderPath);
     }
 
     #region External
@@ -125,5 +134,8 @@ public static class FolderManager
 
     [DllImport(Shell32, CharSet = CharSet.Auto)]
     private static extern uint SHSetLocalizedName(string path, string resourcePath, int resourceID);
+
+    [DllImport(Shell32, CharSet = CharSet.Auto)]
+    private static extern uint SHRemoveLocalizedName(string path);
     #endregion
 }

@@ -1,7 +1,7 @@
-﻿using System.Reflection;
+﻿using CustomizeFolderToolPlus.Common;
+using System.Reflection;
 using System.Text.RegularExpressions;
-using ToolLib;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus;
 
@@ -14,6 +14,7 @@ public class FolderTool
     private string ToolFolder { get; }
     private string ResourceFolder { get; }
 
+    private uint ResourceId { get; set; }
     private string? ResourceFileFullName { get; set; }
     private string? ResourceFileRelativeName { get; set; }
 
@@ -45,11 +46,16 @@ public class FolderTool
 
     private uint GetLastId()
     {
-        var maxIndex = Directory.GetFiles(this.ResourceFolder)
-            .Where(x => Regex.IsMatch(x, string.Format(ToolResourceTemplateFileName.Replace(".", @"\."), @"\d+")))
-            .Select(x => x.Replace(".dll", "").Split(".", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Last())
-            .Max();
-        return string.IsNullOrWhiteSpace(maxIndex) ? 1U : uint.Parse(maxIndex);
+        if (!Directory.Exists(this.ResourceFolder))
+        {
+            Directory.CreateDirectory(this.ResourceFolder);
+        }
+
+        var files = Directory.GetFiles(this.ResourceFolder);
+        var resourceFiles = files.Where(x => Regex.IsMatch(x, string.Format(ToolResourceTemplateFileName.Replace(".", @"\."), @"\d+")));
+        var indexes = resourceFiles.Select(x => x.Replace(".dll", "").Split(".", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Last());
+        var maxIndex = indexes.Max();
+        return string.IsNullOrWhiteSpace(maxIndex) ? 1U : (uint.Parse(maxIndex) + 1);
     }
 
     private void GenerateResourceFile()
@@ -64,6 +70,7 @@ public class FolderTool
         {
             File.Copy(Path.Combine(this.ToolFolder, ToolResourceFileName), resourceFileFullName);
         }
+        this.ResourceId = id;
         this.ResourceFileFullName = resourceFileFullName;
         this.ResourceFileRelativeName = Path.Combine(BaseFolder, ToolResourceFolder, Path.GetFileName(resourceFileFullName));
     }
@@ -74,6 +81,8 @@ public class FolderTool
         {
             ResourcesManager.CreateStringResources(this.ResourceFileFullName, AliasIndex, alias);
             FolderManager.SetLocalizedName(this.FolderPath, this.ResourceFileRelativeName, AliasIndex);
+            FolderManager.ResetFlags(this.FolderPath);
+            FolderManager.SetFlags(this.FolderPath, this.ResourceId);
         }
     }
 
@@ -88,6 +97,8 @@ public class FolderTool
         {
             ResourcesManager.CreateIconResources(this.ResourceFileFullName, IconIndex, iconData);
             FolderManager.SetIcon(this.FolderPath, this.ResourceFileRelativeName, -1);
+            FolderManager.ResetFlags(this.FolderPath);
+            FolderManager.SetFlags(this.FolderPath, this.ResourceId);
         }
     }
 
@@ -99,6 +110,8 @@ public class FolderTool
     public void CreateComment(string tipinfo)
     {
         FolderManager.SetInfoTip(this.FolderPath, tipinfo);
+        FolderManager.ResetFlags(this.FolderPath);
+        FolderManager.SetFlags(this.FolderPath, this.ResourceId);
     }
 
     public void DeleteComment()
@@ -123,6 +136,10 @@ public class FolderTool
 
     private void Reapply()
     {
-        FolderManager.RefreshFolder(this.FolderPath);
+        var desktopFile = Path.Combine(this.FolderPath, DesktopFile);
+        if (File.Exists(desktopFile))
+        {
+            FolderManager.RefreshFolder(this.FolderPath);
+        }
     }
 }

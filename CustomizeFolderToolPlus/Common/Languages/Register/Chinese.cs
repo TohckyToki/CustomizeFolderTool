@@ -1,4 +1,4 @@
-﻿namespace ToolLib.Languages.Register;
+﻿namespace CustomizeFolderToolPlus.Common.Languages.Register;
 
 public class Chinese : ILanguage
 {

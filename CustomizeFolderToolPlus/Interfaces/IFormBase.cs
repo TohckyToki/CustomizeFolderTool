@@ -1,4 +1,4 @@
-﻿using ToolLib.Languages.Tool;
+﻿using CustomizeFolderToolPlus.Common.Languages.Tool;
 
 namespace CustomizeFolderToolPlus.Interfaces;
 

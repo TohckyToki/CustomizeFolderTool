@@ -3,9 +3,9 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
-namespace ToolLib;
+namespace CustomizeFolderToolPlus.Common;
 
 public static class ResourcesManager
 {
@@ -139,7 +139,7 @@ public static class ResourcesManager
                 // Grab the structure.
                 var entry =
                     (ICONDIRENTRY)Marshal.PtrToStructure(
-                        new nint(pinnedBytes.AddrOfPinnedObject().ToInt64() + offset + (size * i)),
+                        new nint(pinnedBytes.AddrOfPinnedObject().ToInt64() + offset + size * i),
                         iconDirEntryType)!;
                 iconEntry[i] = entry;
                 // Grab the associated pixel data.
@@ -173,7 +173,7 @@ public static class ResourcesManager
                 grpEntry.BytesInRes = iconEntry[i].BytesInRes;
                 grpEntry.ID = Convert.ToUInt16(baseId + i);
                 Marshal.StructureToPtr(grpEntry,
-                    new nint(pinnedData.AddrOfPinnedObject().ToInt64() + offset + (size * i)),
+                    new nint(pinnedData.AddrOfPinnedObject().ToInt64() + offset + size * i),
                     false);
             }
 

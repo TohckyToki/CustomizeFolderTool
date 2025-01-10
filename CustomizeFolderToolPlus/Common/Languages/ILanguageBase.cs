@@ -1,4 +1,4 @@
-﻿namespace ToolLib.Languages;
+﻿namespace CustomizeFolderToolPlus.Common.Languages;
 
 public interface ILanguageBase
 {

@@ -1,5 +1,6 @@
-﻿using System.Reflection;
-using ToolLib;
+﻿using CustomizeFolderToolPlus.Common;
+using System.Drawing;
+using System.Reflection;
 
 namespace Test
 {
@@ -8,19 +9,20 @@ namespace Test
         static void Main()
         {
             var file = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "ToolResources.dll");
-            var icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Icon02.ico");
+            var icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Icon09.ico");
 
-            ResourcesManager.CreateStringResources(file, 1, "QWE");
-            ResourcesManager.CreateIconResources(file, 0, File.ReadAllBytes(icon));
+            ResourcesManager.CreateStringResources(file, 101, "FFF");
+            ResourcesManager.CreateIconResources(file, 17, File.ReadAllBytes(icon));
+            var rFile = Path.Combine("%CFT_TEST%", "ToolResources.dll");
 
-            var folder = @"D:\test\zzz";
-            FolderManager.SetInfoTip(folder, null);
-            FolderManager.SetIcon(folder, file, 0);
-            FolderManager.SetLocalizedName(folder, file, 1);
-            var flags = FolderManager.GetFlags(folder);
+            var iconFile = new Icon(icon);
+            iconFile.ToBitmap().GetHicon();
+            
 
-            Console.WriteLine(flags);
-
+            var folder = @"D:\test\aaa";
+            FolderManager.RemoveLocalizedName(folder);
+            FolderManager.SetLocalizedName(folder, rFile, 101);
+            FolderManager.SetIcon(folder, rFile, 1);
         }
     }
 }

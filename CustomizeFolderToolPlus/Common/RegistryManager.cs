@@ -1,10 +1,10 @@
 ﻿#nullable disable
 
+using CustomizeFolderToolPlus.Common.Languages.Register;
 using Microsoft.Win32;
-using ToolLib.Languages.Register;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
-namespace ToolLib;
+namespace CustomizeFolderToolPlus.Common;
 
 public class RegistryManager
 {

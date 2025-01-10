@@ -1,9 +1,9 @@
-﻿using CustomizeFolderToolPlus.Interfaces;
+﻿using CustomizeFolderToolPlus.Common.Languages.Tool;
+using CustomizeFolderToolPlus.Interfaces;
 using CustomizeFolderToolPlus.Properties;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using ToolLib.Languages.Tool;
-using static ToolLib.Constants;
+using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus.Forms;
 

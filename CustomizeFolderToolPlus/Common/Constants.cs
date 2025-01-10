@@ -1,4 +1,4 @@
-﻿namespace ToolLib;
+﻿namespace CustomizeFolderToolPlus.Common;
 
 public abstract class Constants
 {
