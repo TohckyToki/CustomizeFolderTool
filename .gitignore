@@ -340,6 +340,7 @@ ASALocalRun/
 healthchecksdb
 
 bin
+obj
 release
 setup
 packages

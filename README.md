@@ -1,11 +1,10 @@
-### 自定义文件夹工具（Windows限定）
+### Tool for customize folder(windows only)
 
-这是一个可以自定义文件夹的工具，安装后在Windows系统下的文件夹右键可以出现自定义菜单，选择相应功能会立即对文件夹进行修改
+Before use the tool, you need to unzip the archive file, then click exe file to register it to your machine.
 
-目前有以下功能
-- 文件夹别名
-- 自定义文件夹图标
-- 自定义文件夹备注
-
-预定开发的功能
-- 添加批量替换文件夹、文件名功能
+The tool currently has the following three functions.
+- Add alias to folder
+  It used Localize Name in windows that can modify display name of folder only. The physical path will not change.
+- Customize folder icon
+- Add commnet to folder
+  Need to make commnets column show in explorer
