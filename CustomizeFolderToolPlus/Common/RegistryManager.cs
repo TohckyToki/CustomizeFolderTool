@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus.Common;
@@ -24,7 +25,7 @@ public class RegistryManager
     {
         await this.Delete(false);
 
-        var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
+        var installedPath = Path.GetDirectoryName(Application.ExecutablePath)!;
         var baseCommand = $"{Path.Combine(installedPath, ToolExeFileName)} {RegistryValue.CurrentLocation}";
         var languageSetting = $"{ToolCommand.Language} {language.CodePage}";
         var regMainMenu = default(RegistryKey);

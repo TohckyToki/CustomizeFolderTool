@@ -1,7 +1,7 @@
 ﻿using CustomizeFolderToolPlus.Common;
 using Microsoft.Data.Sqlite;
 using System.IO;
-using System.Reflection;
+using System.Windows.Forms;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus;
@@ -26,7 +26,7 @@ public class FolderTool
     private FolderTool(string folderPath)
     {
         this.FolderPath = folderPath;
-        this.ToolFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        this.ToolFolder = Path.GetDirectoryName(Application.ExecutablePath)!;
         this.ResourceFolder = Path.Combine(this.ToolFolder, ToolResourceFolder);
 
         this.DataConnection = string.Format("Data Source={0}", Path.Combine(this.ToolFolder, "Data.dll"));
