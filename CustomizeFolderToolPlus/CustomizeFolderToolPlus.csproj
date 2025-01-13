@@ -14,9 +14,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Forms\Register.Designer.cs~RF1994c6ff.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Include="CustomizeFolderTool.ico">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,6 +52,12 @@
 
 	<ItemGroup>
 		<SupportedPlatform Include="Windows" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Data.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

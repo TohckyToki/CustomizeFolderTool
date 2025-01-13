@@ -32,18 +32,22 @@ public partial class Register : Form
         }
     }
 
-    private void button1_Click(object sender, EventArgs e)
+    private async void button1_Click(object sender, EventArgs e)
     {
+        this.panel2.Visible = true;
         var register = new RegistryManager();
-        register.Add(Language);
+        await register.Add(Language);
         CheckRegisterState();
+        this.panel2.Visible = false;
     }
 
-    private void button2_Click(object sender, EventArgs e)
+    private async void button2_Click(object sender, EventArgs e)
     {
+        this.panel2.Visible = true;
         var register = new RegistryManager();
-        register.Delete();
+        await register.Delete();
         CheckRegisterState();
+        this.panel2.Visible = false;
     }
 
     private void CheckRegisterState()

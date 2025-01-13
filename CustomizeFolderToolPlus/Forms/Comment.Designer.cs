@@ -30,6 +30,7 @@ partial class Comment
     /// </summary>
     private void InitializeComponent()
     {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Comment));
         this.label1 = new Label();
         this.textBox1 = new TextBox();
         this.button1 = new Button();
@@ -82,7 +83,10 @@ partial class Comment
         this.Controls.Add(this.button1);
         this.Controls.Add(this.textBox1);
         this.Controls.Add(this.label1);
-        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        this.Icon = (Icon)resources.GetObject("$this.Icon");
+        this.MaximizeBox = false;
+        this.MinimizeBox = false;
         this.Name = "Comment";
         this.StartPosition = FormStartPosition.CenterScreen;
         this.Text = "Form1";

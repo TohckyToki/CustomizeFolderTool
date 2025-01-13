@@ -17,9 +17,9 @@ public class RegistryManager
         this.Target = EnvironmentVariableTarget.User;
     }
 
-    public void Add(ILanguage language)
+    public async Task Add(ILanguage language)
     {
-        this.Delete(false);
+        await this.Delete(false);
 
         var installedPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
         var baseCommand = $"{Path.Combine(installedPath, ToolExeFileName)} {RegistryValue.CurrentLocation}";
@@ -87,7 +87,7 @@ public class RegistryManager
 
             regMainMenu.Close();
 
-            Environment.SetEnvironmentVariable(EnvName, installedPath, Target);
+            await Task.Run(() => Environment.SetEnvironmentVariable(EnvName, installedPath, Target));
         }
         catch (Exception)
         {
@@ -100,7 +100,7 @@ public class RegistryManager
         }
     }
 
-    public void Delete(bool needClose = true)
+    public async Task Delete(bool needClose = true)
     {
         try
         {
@@ -113,7 +113,10 @@ public class RegistryManager
                 this.RegDirectory.CreateSubKey(RegistryValue.ContextMenus).DeleteSubKeyTree(ToolName);
             }
 
-            Environment.SetEnvironmentVariable(EnvName, null, Target);
+            if (needClose)
+            {
+                await Task.Run(() => Environment.SetEnvironmentVariable(EnvName, null, Target));
+            }
         }
         catch (Exception)
         {

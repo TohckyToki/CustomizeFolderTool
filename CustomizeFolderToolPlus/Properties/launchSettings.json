@@ -2,7 +2,7 @@
   "profiles": {
     "CustomizeFolderToolPlus": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\test\\New\" -a alias -lang en-US"
+      "commandLineArgs": "\"D:\\test\\New\" -a icon -lang en-US"
     }
   }
 }

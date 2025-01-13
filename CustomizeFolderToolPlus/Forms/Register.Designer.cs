@@ -33,6 +33,11 @@ partial class Register
         this.button2 = new Button();
         this.label1 = new Label();
         this.comboBox1 = new ComboBox();
+        this.panel1 = new Panel();
+        this.panel2 = new Panel();
+        this.progressBar1 = new ProgressBar();
+        this.panel1.SuspendLayout();
+        this.panel2.SuspendLayout();
         this.SuspendLayout();
         // 
         // button1
@@ -75,23 +80,56 @@ partial class Register
         this.comboBox1.TabIndex = 3;
         this.comboBox1.SelectedIndexChanged += this.comboBox1_SelectedIndexChanged;
         // 
+        // panel1
+        // 
+        this.panel1.Controls.Add(this.button2);
+        this.panel1.Controls.Add(this.comboBox1);
+        this.panel1.Controls.Add(this.button1);
+        this.panel1.Controls.Add(this.label1);
+        this.panel1.Dock = DockStyle.Fill;
+        this.panel1.Location = new Point(0, 0);
+        this.panel1.Name = "panel1";
+        this.panel1.Size = new Size(204, 101);
+        this.panel1.TabIndex = 4;
+        // 
+        // panel2
+        // 
+        this.panel2.Controls.Add(this.progressBar1);
+        this.panel2.Dock = DockStyle.Fill;
+        this.panel2.Location = new Point(0, 0);
+        this.panel2.Name = "panel2";
+        this.panel2.Size = new Size(204, 101);
+        this.panel2.TabIndex = 5;
+        this.panel2.Visible = false;
+        // 
+        // progressBar1
+        // 
+        this.progressBar1.Location = new Point(12, 35);
+        this.progressBar1.Name = "progressBar1";
+        this.progressBar1.Size = new Size(180, 20);
+        this.progressBar1.Style = ProgressBarStyle.Marquee;
+        this.progressBar1.TabIndex = 4;
+        this.progressBar1.UseWaitCursor = true;
+        // 
         // Register
         // 
         this.AutoScaleDimensions = new SizeF(7F, 15F);
         this.AutoScaleMode = AutoScaleMode.Font;
         this.ClientSize = new Size(204, 101);
-        this.Controls.Add(this.comboBox1);
-        this.Controls.Add(this.label1);
-        this.Controls.Add(this.button2);
-        this.Controls.Add(this.button1);
-        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        this.Controls.Add(this.panel2);
+        this.Controls.Add(this.panel1);
+        this.FormBorderStyle = FormBorderStyle.FixedSingle;
         this.Icon = (Icon)resources.GetObject("$this.Icon");
+        this.MaximizeBox = false;
+        this.MinimizeBox = false;
         this.Name = "Register";
         this.StartPosition = FormStartPosition.CenterScreen;
         this.Text = "ToolRegister";
         this.Load += this.Register_Load;
+        this.panel1.ResumeLayout(false);
+        this.panel1.PerformLayout();
+        this.panel2.ResumeLayout(false);
         this.ResumeLayout(false);
-        this.PerformLayout();
     }
 
     #endregion
@@ -100,4 +138,7 @@ partial class Register
     private Button button2;
     private Label label1;
     private ComboBox comboBox1;
+    private Panel panel1;
+    private Panel panel2;
+    private ProgressBar progressBar1;
 }

@@ -29,6 +29,7 @@ partial class Icons
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Icons));
         this.panel1 = new Panel();
         this.toolTip1 = new ToolTip(this.components);
         this.SuspendLayout();
@@ -47,7 +48,10 @@ partial class Icons
         this.AutoScaleMode = AutoScaleMode.Font;
         this.ClientSize = new Size(380, 232);
         this.Controls.Add(this.panel1);
-        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        this.Icon = (Icon)resources.GetObject("$this.Icon");
+        this.MaximizeBox = false;
+        this.MinimizeBox = false;
         this.Name = "Icons";
         this.StartPosition = FormStartPosition.CenterScreen;
         this.Text = "Icons";
