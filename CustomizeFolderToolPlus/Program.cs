@@ -1,6 +1,10 @@
 using CustomizeFolderToolPlus.Common.Languages.Tool;
 using CustomizeFolderToolPlus.Forms;
 using CustomizeFolderToolPlus.Interfaces;
+using System;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus;

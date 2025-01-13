@@ -2,6 +2,9 @@
 
 using CustomizeFolderToolPlus.Common.Languages.Register;
 using Microsoft.Win32;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus.Common;

@@ -1,8 +1,13 @@
 ﻿using CustomizeFolderToolPlus.Common.Languages.Tool;
 using CustomizeFolderToolPlus.Interfaces;
 using CustomizeFolderToolPlus.Properties;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Windows.Forms;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus.Forms;

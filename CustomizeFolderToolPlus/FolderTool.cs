@@ -1,7 +1,7 @@
 ﻿using CustomizeFolderToolPlus.Common;
 using Microsoft.Data.Sqlite;
+using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using static CustomizeFolderToolPlus.Common.Constants;
 
 namespace CustomizeFolderToolPlus;

@@ -1,4 +1,7 @@
-﻿namespace CustomizeFolderToolPlus.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace CustomizeFolderToolPlus.Forms;
 
 partial class Alias
 {
